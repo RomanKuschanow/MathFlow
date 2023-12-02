@@ -7,5 +7,6 @@ public enum LexType
     Operator,
     Separator,
     Number,
-    Space
+    Space,
+    None
 }

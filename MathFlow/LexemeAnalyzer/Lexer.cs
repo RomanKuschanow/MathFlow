@@ -32,13 +32,13 @@ public class Lexer
     {
         List<LexemeRow> lexemes = new();
 
-        string[] rows = Regex.Split(text, @"(?<=\n)|(?=\n)");
+        string[] rows = Regex.Split(text, @"(?<=\n)").Where(r => !string.IsNullOrWhiteSpace(r)).Select(r => r.Trim()).ToArray();
 
         for (int i = 0; i < rows.Length; i++)
         {
-            string[] subRows = Regex.Split(rows[i].Trim(), @"(?<=;)|(?=;)");
+            string[] subRows = Regex.Split(rows[i], @"(?<=;)").Where(r => !string.IsNullOrWhiteSpace(r)).Select(r => r.Trim()).ToArray();
 
-            for (int j = 0; j < rows.Length; j++)
+            for (int j = 0; j < subRows.Length; j++)
             {
                 LexemeRow lexRow = new();
 
@@ -49,7 +49,7 @@ public class Lexer
 
                     foreach (var def in LexemeDefinitions)
                     {
-                        if (def.TryGetLexeme(text[startIndex..], out Lexeme lex))
+                        if (def.TryGetLexeme(subRows[j][startIndex..], out Lexeme lex))
                         {
                             lexRow.Add(lex);
                             foundLex = true;
