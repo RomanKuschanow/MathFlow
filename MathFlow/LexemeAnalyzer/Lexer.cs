@@ -22,7 +22,6 @@ public class Lexer
     string[] _keywords =
     {
         "num",
-        "dec",
         "print",
     };
 
