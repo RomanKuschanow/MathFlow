@@ -35,7 +35,7 @@ public class LexerFixture
     public void GivenCode_WhenAnalyze_ThenLexemeListContainsGivenCountOfRows(string code, int rows)
     {
         // Arrange
-        var sut = new Lexer();
+        var sut = new Lexer(Constants.LexemeDefinitions);
 
         // Act
         var result = sut.Analyze(code);
@@ -49,7 +49,7 @@ public class LexerFixture
     public void GivenCode_WhenAnalyze_ThenLexemeListContainsGivenLexemes(string code, List<Lexeme> lexemes)
     {
         // Arrange
-        var sut = new Lexer();
+        var sut = new Lexer(Constants.LexemeDefinitions);
 
         // Act
         var result = sut.Analyze(code);

@@ -1,0 +1,162 @@
+﻿using MathFlow.LexemeAnalyzer;
+using MathFlow.SyntaxAnalyzer;
+using System.Collections.Immutable;
+using System.Text.RegularExpressions;
+
+namespace MathFlow;
+public static class Constants
+{
+    public static ImmutableList<ILexemeDefinition> LexemeDefinitions => new List<ILexemeDefinition>()
+    {
+        new RegexLexemeDefinition(new Regex(GetKeywordPattern(_keywords)), LexType.Keyword),
+        new RegexLexemeDefinition(new Regex(@"^[\p{L}@_]+[\p{L}@_\d]*"), LexType.Identifier),
+        new RegexLexemeDefinition(new Regex(@"^\b\d+(?:\.\d+)?(?:[Ee][+-]?\d+)?m?"), LexType.Number),
+        new RegexLexemeDefinition(new Regex(@"^[-+*/=]"), LexType.Operator),
+        new RegexLexemeDefinition(new Regex(@"^[();]"), LexType.Separator),
+        new RegexLexemeDefinition(new Regex(@"^\s*"), LexType.Space),
+    }.ToImmutableList();
+
+    private static string[] _keywords =
+    {
+        "num",
+        "print",
+    };
+
+    public static ImmutableList<IRule> Rules => new List<IRule>()
+    {
+        new Rule("Program", "StatementList"),
+        new Rule("StatementList", "StatementList", "Statement"),
+        new Rule("StatementList", "Statement"),
+        new Rule("Statement", "Declaration", ";"),
+        new Rule("Statement", "Assignment", ";"),
+        new Rule("Statement", "PrintStatement", ";"),
+        new Rule("Declaration", "type", "id"),
+        new Rule("Declaration", "type", "id", "=", "Expression"),
+        new Rule("Assignment", "id", "=", "Expression"),
+        new Rule("PrintStatement", "print", "(", "Expression", ")"),
+        new Rule("Expression", "Expression", "+", "Term"),
+        new Rule("Expression", "Expression", "-", "Term"),
+        new Rule("Expression", "Term"),
+        new Rule("Term", "Term", "*", "Factor"),
+        new Rule("Term", "Term", "/", "Factor"),
+        new Rule("Term", "Factor"),
+        new Rule("Factor", "(", "Expression", ")"),
+        new Rule("Factor", "number"),
+        new Rule("Factor", "id"),
+        new Rule("Factor", "Unary"),
+        new Rule("Unary", "-", "Factor"),
+    }.ToImmutableList();
+
+    public static ImmutableList<Dictionary<string, int>> Actions => new List<Dictionary<string, int>>()
+    {
+        /*0*/  new() { { "type", 6 }, { "id", 7 }, { "print", 8 } },
+        /*1*/  new() { { "type", 6 }, { "id", 7 }, { "print", 8 }, { "$", 0 } },
+        /*2*/  new() { { "type", -2 }, { "id", -2 }, { "print", -2 }, { "$", -2 } },
+        /*3*/  new() { { ";", 10 } },
+        /*4*/  new() { { ";", 11 } },
+        /*5*/  new() { { ";", 12 } },
+        /*6*/  new() { { "id", 13 } },
+        /*7*/  new() { { "=", 14 } },
+        /*8*/  new() { { "(", 15 } },
+        /*9*/  new() { { "type", -1 }, { "id", -1 }, { "print", -1 }, { "$", -1 } },
+        /*10*/ new() { { "type", -3 }, { "id", -3 }, { "print", -3 }, { "$", -3 } },
+        /*11*/ new() { { "type", -4 }, { "id", -4 }, { "print", -4 }, { "$", -4 } },
+        /*12*/ new() { { "type", -5 }, { "id", -5 }, { "print", -5 }, { "$", -5 } },
+        /*13*/ new() { { ";", -6 }, { "=", 16 } },
+        /*14*/ new() { { "id", 22 }, { "(", 20 }, { "-", 24 }, { "number", 21 } },
+        /*15*/ new() { { "id", 30 }, { "(", 28 }, { "-", 32 }, { "number", 29 } },
+        /*16*/ new() { { "id", 22 }, { "(", 20 }, { "-", 24 }, { "number", 21 } },
+        /*17*/ new() { { ";", -8 }, { "+", 34 }, { "-", 35 } },
+        /*18*/ new() { { ";", -12 }, { "+", -12 }, { "-", -12 }, { "*", 36 }, { "/", 37 } },
+        /*19*/ new() { { ";", -15 }, { "+", -15 }, { "-", -15 }, { "*", -15 }, { "/", -15 } },
+        /*20*/ new() { { "id", 30 }, { "(", 28 }, { "-", 32 }, { "number", 29 } },
+        /*21*/ new() { { ";", -17 }, { "+", -17 }, { "-", -17 }, { "*", -17 }, { "/", -17 } },
+        /*22*/ new() { { ";", -18 }, { "+", -18 }, { "-", -18 }, { "*", -18 }, { "/", -18 } },
+        /*23*/ new() { { ";", -19 }, { "+", -19 }, { "-", -19 }, { "*", -19 }, { "/", -19 } },
+        /*24*/ new() { { "id", 22 }, { "(", 20 }, { "-", 24 }, { "number", 21 } },
+        /*25*/ new() { { ")", 40 }, { "+", 41 }, { "-", 42 } },
+        /*26*/ new() { { ")", -12 }, { "+", -12 }, { "-", -12 }, { "*", 43 }, { "/", 44 } },
+        /*27*/ new() { { ")", -15 }, { "+", -15 }, { "-", -15 }, { "*", -15 }, { "/", -15 } },
+        /*28*/ new() { { "id", 30 }, { "(", 28 }, { "-", 32 }, { "number", 29 } },
+        /*29*/ new() { { ")", -17 }, { "+", -17 }, { "-", -17 }, { "*", -17 }, { "/", -17 } },
+        /*30*/ new() { { ")", -18 }, { "+", -18 }, { "-", -18 }, { "*", -18 }, { "/", -18 } },
+        /*31*/ new() { { ")", -19 }, { "+", -19 }, { "-", -19 }, { "*", -19 }, { "/", -19 } },
+        /*32*/ new() { { "id", 30 }, { "(", 28 }, { "-", 32 }, { "number", 29 } },
+        /*33*/ new() { { ";", -7 }, { "+", 34 }, { "-", 35 } },
+        /*34*/ new() { { "id", 22 }, { "(", 20 }, { "-", 24 }, { "number", 21 } },
+        /*35*/ new() { { "id", 22 }, { "(", 20 }, { "-", 25 }, { "number", 21 } },
+        /*36*/ new() { { "id", 22 }, { "(", 20 }, { "-", 26 }, { "number", 21 } },
+        /*37*/ new() { { "id", 22 }, { "(", 20 }, { "-", 27 }, { "number", 21 } },
+        /*38*/ new() { { ")", 51 }, { "+", 41 }, { "-", 42 } },
+        /*39*/ new() { { ";", -20 }, { "+", -20 }, { "-", -20 }, { "*", -20 }, { "/", -20 } },
+        /*40*/ new() { { ";", -9 } },
+        /*41*/ new() { { "id", 30 }, { "(", 28 }, { "-", 32 }, { "number", 29 } },
+        /*42*/ new() { { "id", 30 }, { "(", 28 }, { "-", 32 }, { "number", 29 } },
+        /*43*/ new() { { "id", 30 }, { "(", 28 }, { "-", 32 }, { "number", 29 } },
+        /*44*/ new() { { "id", 30 }, { "(", 28 }, { "-", 32 }, { "number", 29 } },
+        /*45*/ new() { { ")", 56 }, { "+", 41 }, { "-", 42 } },
+        /*46*/ new() { { ")", -20 }, { "+", -20 }, { "-", -20 }, { "*", -20 }, { "/", -20 } },
+        /*47*/ new() { { ";", -10 }, { "+", -10 }, { "-", -10 }, { "*", 36 }, { "/", 37 } },
+        /*48*/ new() { { ";", -11 }, { "+", -11 }, { "-", -11 }, { "*", 36 }, { "/", 37 } },
+        /*49*/ new() { { ";", -13 }, { "+", -13 }, { "-", -13 }, { "*", -13 }, { "/", -13 } },
+        /*50*/ new() { { ";", -14 }, { "+", -14 }, { "-", -14 }, { "*", -14 }, { "/", -14 } },
+        /*51*/ new() { { ";", -16 }, { "+", -16 }, { "-", -16 }, { "*", -16 }, { "/", -16 } },
+        /*52*/ new() { { ")", -10 }, { "+", -10 }, { "-", -10 }, { "*", 43 }, { "/", 44 } },
+        /*53*/ new() { { ")", -11 }, { "+", -11 }, { "-", -11 }, { "*", 43 }, { "/", 44 } },
+        /*54*/ new() { { ")", -13 }, { "+", -13 }, { "-", -13 }, { "*", -13 }, { "/", -13 } },
+        /*55*/ new() { { ")", -14 }, { "+", -14 }, { "-", -14 }, { "*", -14 }, { "/", -14 } },
+        /*56*/ new() { { ")", -16 }, { "+", -16 }, { "-", -16 }, { "*", -16 }, { "/", -16 } },
+    }.ToImmutableList();
+
+    public static ImmutableList<Dictionary<string, int>> Goto => new List<Dictionary<string, int>>()
+    {
+        /*0*/  new() { { "StatementList", 1 }, { "Statement", 2 }, { "Declaration", 3 }, { "Assignment", 4 }, { "PrintStatement", 5 } },
+        /*1*/  new() { { "Statement", 9 }, { "Declaration", 3 }, { "Assignment", 4 }, { "PrintStatement", 5 } },
+        /*2*/  new(),
+        /*3*/  new(),
+        /*4*/  new(),
+        /*5*/  new(),
+        /*6*/  new(),
+        /*7*/  new(),
+        /*8*/  new(),
+        /*9*/  new(),
+        /*10*/ new(),
+        /*11*/ new(),
+        /*12*/ new(),
+        /*13*/ new(),
+        /*14*/ new() { { "Expression", 17 }, { "Term", 18 }, { "Factor", 19 }, { "Unary", 23 } },
+        /*15*/ new() { { "Expression", 25 }, { "Term", 26 }, { "Factor", 27 }, { "Unary", 31 } },
+        /*16*/ new() { { "Expression", 33 }, { "Term", 18 }, { "Factor", 19 }, { "Unary", 23 } },
+        /*17*/ new(),
+        /*18*/ new(),
+        /*19*/ new(),
+        /*20*/ new() { { "Expression", 38 }, { "Term", 26 }, { "Factor", 27 }, { "Unary", 31 } },
+        /*21*/ new(),
+        /*22*/ new(),
+        /*23*/ new(),
+        /*24*/ new() { { "Factor", 39 }, { "Unary", 23 } },
+        /*25*/ new(),
+        /*26*/ new(),
+        /*27*/ new(),
+        /*28*/ new() { { "Expression", 45 }, { "Term", 26 }, { "Factor", 27 }, { "Unary", 31 } },
+        /*29*/ new(),
+        /*30*/ new(),
+        /*31*/ new(),
+        /*32*/ new() { { "Factor", 46 }, { "Unary", 31 } },
+        /*33*/ new(),
+        /*34*/ new() { { "Term", 47 }, { "Factor", 19 }, { "Unary", 23 } },
+        /*35*/ new() { { "Term", 48 }, { "Factor", 19 }, { "Unary", 23 } },
+        /*36*/ new() { { "Factor", 49 }, { "Unary", 23 } },
+        /*37*/ new() { { "Factor", 50 }, { "Unary", 23 } },
+        /*38*/ new(),
+        /*39*/ new(),
+        /*40*/ new(),
+        /*41*/ new() { { "Term", 52 }, { "Factor", 27 }, { "Unary", 31 } },
+        /*42*/ new() { { "Term", 53 }, { "Factor", 27 }, { "Unary", 31 } },
+        /*43*/ new() { { "Factor", 54 }, { "Unary", 31 } },
+        /*44*/ new() { { "Factor", 55 }, { "Unary", 31 } },
+    }.ToImmutableList();
+
+    private static string GetKeywordPattern(string[] keywords) => $"^{string.Join("|", keywords)}";
+
+}

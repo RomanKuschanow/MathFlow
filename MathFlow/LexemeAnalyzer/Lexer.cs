@@ -1,6 +1,7 @@
 ﻿using MathFlow.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -9,23 +10,12 @@ using System.Threading.Tasks;
 namespace MathFlow.LexemeAnalyzer;
 public class Lexer
 {
-    ILexemeDefinition[] LexemeDefinitions => new ILexemeDefinition[]
-    {
-        new RegexLexemeDefinition(new Regex(GetKeywordPattern(_keywords)), LexType.Keyword),
-        new RegexLexemeDefinition(new Regex(@"^[\p{L}@_]+[\p{L}@_\d]*"), LexType.Identifier),
-        new RegexLexemeDefinition(new Regex(@"^\b\d+(?:\.\d+)?(?:[Ee][+-]?\d+)?m?"), LexType.Number),
-        new RegexLexemeDefinition(new Regex(@"^[-+*/=]"), LexType.Operator),
-        new RegexLexemeDefinition(new Regex(@"^[();]"), LexType.Separator),
-        new RegexLexemeDefinition(new Regex(@"^\s*"), LexType.Space),
-    };
+    private readonly IEnumerable<ILexemeDefinition> _definitions;
 
-    string[] _keywords =
+    public Lexer(IEnumerable<ILexemeDefinition> definitions)
     {
-        "num",
-        "print",
-    };
-
-    private static string GetKeywordPattern(string[] keywords) => $"^{string.Join("|", keywords)}";
+        _definitions = definitions;
+    }
 
     public List<LexemeRow> Analyze(string text)
     {
@@ -46,7 +36,7 @@ public class Lexer
                 {
                     bool foundLex = false;
 
-                    foreach (var def in LexemeDefinitions)
+                    foreach (var def in _definitions)
                     {
                         if (def.TryGetLexeme(subRows[j][startIndex..], out Lexeme lex))
                         {
