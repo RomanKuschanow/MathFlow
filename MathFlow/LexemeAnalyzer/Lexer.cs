@@ -17,43 +17,38 @@ public class Lexer
         _definitions = definitions;
     }
 
-    public List<LexemeRow> Analyze(string text)
+    public List<Lexeme> Analyze(string text)
     {
-        List<LexemeRow> lexemes = new();
+        List<Lexeme> lexemes = new();
 
         string[] rows = Regex.Split(text, @"(?<=\n)").Where(r => !string.IsNullOrWhiteSpace(r)).Select(r => r.Trim()).ToArray();
 
         for (int i = 0; i < rows.Length; i++)
         {
-            string[] subRows = Regex.Split(rows[i], @"(?<=;)").Where(r => !string.IsNullOrWhiteSpace(r)).Select(r => r.Trim()).ToArray();
-
-            for (int j = 0; j < subRows.Length; j++)
+            int startIndex = 0;
+            while (startIndex < rows[i].Length)
             {
-                LexemeRow lexRow = new();
+                bool foundLex = false;
 
-                int startIndex = 0;
-                while (startIndex < subRows[j].Length)
+                foreach (var def in _definitions)
                 {
-                    bool foundLex = false;
-
-                    foreach (var def in _definitions)
+                    if (def.TryGetLexeme(rows[i][startIndex..], out Lexeme lex))
                     {
-                        if (def.TryGetLexeme(subRows[j][startIndex..], out Lexeme lex))
+                        if (!string.IsNullOrWhiteSpace(lex.Value))
                         {
-                            lexRow.Add(lex);
-                            foundLex = true;
-                            startIndex += lex.Value.Length;
-                            break;
+                            lexemes.Add(lex);
                         }
-                    }
 
-                    if (!foundLex)
-                    {
-                        throw new UnrecognizedCharacterException(i, subRows[..j].Select(sr => sr.Length).Sum() + startIndex);
+                        foundLex = true;
+                        startIndex += lex.Value.Length;
+                        break;
                     }
                 }
 
-                lexemes.Add(lexRow);
+                if (!foundLex)
+                {
+                    throw new UnrecognizedCharacterException(i, startIndex);
+                }
             }
         }
 

@@ -17,7 +17,7 @@ public class Parser
         _goto = @goto;
     }
 
-    public NonTerminal Parse(Stack<Terminal> input)
+    public NonTerminal Parse(Stack<IToken> input)
     {
         ParserStack stack = new();
 
