@@ -1,48 +1,8 @@
 ﻿using MathFlow.LexemeAnalyzer;
 
 namespace MathFlow.Tests.LexemeAnalyzerFixtures;
-public class LexerFixture
+public class LexerFixtures
 {
-    [Theory]
-    [InlineData(
-        """
-        num x = 1;
-        """, 1)]
-    [InlineData(
-        """
-        num x = 1;
-        x = 4 + 5;
-        """, 2)]
-    [InlineData(
-        """
-        num x = 1;
-
-        x = 4 + 5;
-        """, 2)]
-    [InlineData(
-        """
-        num x = 1;
-        num y = 5;
-        x = 4 + y;
-        """, 3)]
-    [InlineData(
-        """
-        num x = 1;
-        num y = 5;
-        x = 4 + y;
-        print(x);
-        """, 4)]
-    public void GivenCode_WhenAnalyze_ThenLexemeListContainsGivenCountOfRows(string code, int rows)
-    {
-        // Arrange
-        var sut = new Lexer(Constants.LexemeDefinitions);
-
-        // Act
-        var result = sut.Analyze(code);
-
-        // Assert
-        result.Count().Should().Be(rows);
-    }
 
     [Theory]
     [MemberData(nameof(CodeWithLexemes))]
@@ -55,7 +15,7 @@ public class LexerFixture
         var result = sut.Analyze(code);
 
         // Assert
-        result.SelectMany(r => r).Should().BeEquivalentTo(lexemes).And.ContainInOrder(lexemes);
+        result.Should().BeEquivalentTo(lexemes).And.ContainInOrder(lexemes);
     }
 
     public static IEnumerable<object[]> CodeWithLexemes()

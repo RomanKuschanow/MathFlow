@@ -27,6 +27,8 @@ public class ParserStack
             _states.Pop();
         }
 
+        tokens.Reverse();
+
         NonTerminal newToken = new(rule.NonTerminal, tokens);
         _tokens.Push(newToken);
     }
