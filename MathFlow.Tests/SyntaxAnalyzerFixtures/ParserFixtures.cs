@@ -19,6 +19,7 @@ public class ParserFixtures
         var result = sut.Parse(converter.Convert(lexemes));
 
         // Assert
+        AreTreesEqual(result, tree).Should().BeTrue();
 
         bool AreTreesEqual(NonTerminal tree1, NonTerminal tree2)
         {
@@ -28,6 +29,8 @@ public class ParserFixtures
                 return false;
             if (tree1.GetType() != tree2.GetType() || !tree1.Name.Equals(tree2.Name))
                 return false;
+
+            tree1.Tokens.Should().BeEquivalentTo(tree2.Tokens);
 
             if (tree1.Tokens.Count != tree2.Tokens.Count)
                 return false;
