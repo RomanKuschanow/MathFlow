@@ -53,7 +53,7 @@ public class LexerFixtures
                 new(LexType.Operator, "+"),
                 new(LexType.Number, "5"),
                 new(LexType.Separator, ";"),
-            }        
+            }
         };
     }
 }

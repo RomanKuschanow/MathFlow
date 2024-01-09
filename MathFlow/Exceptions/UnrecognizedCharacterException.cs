@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MathFlow.Exceptions;
+﻿namespace MathFlow.Exceptions;
 public class UnrecognizedCharacterException : Exception
 {
     public int Row { get; }

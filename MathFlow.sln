@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34219.65
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathFlow", "MathFlow\MathFlow.csproj", "{89C13B47-8AFD-4C10-A2CB-FF07D70CA39A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathFlow", "MathFlow\MathFlow.csproj", "{89C13B47-8AFD-4C10-A2CB-FF07D70CA39A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathFlow.Tests", "MathFlow.Tests\MathFlow.Tests.csproj", "{AC66419D-47A8-4B74-8CC7-DC20E1FC7AED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathFlow.Tests", "MathFlow.Tests\MathFlow.Tests.csproj", "{AC66419D-47A8-4B74-8CC7-DC20E1FC7AED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{F657AB39-2CAE-403F-B40C-BFBFFEB2AD27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{AC66419D-47A8-4B74-8CC7-DC20E1FC7AED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC66419D-47A8-4B74-8CC7-DC20E1FC7AED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC66419D-47A8-4B74-8CC7-DC20E1FC7AED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F657AB39-2CAE-403F-B40C-BFBFFEB2AD27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F657AB39-2CAE-403F-B40C-BFBFFEB2AD27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F657AB39-2CAE-403F-B40C-BFBFFEB2AD27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F657AB39-2CAE-403F-B40C-BFBFFEB2AD27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
