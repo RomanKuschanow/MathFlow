@@ -132,7 +132,7 @@ public class Analyzer
         else
         {
             if (factor.Tokens.First() is NonTerminal terminal)
-                return new Negation(GetFactor(terminal, getValue, variables));
+                return new Negation(GetFactor((NonTerminal)terminal.Tokens.Last(), getValue, variables));
             else
             {
                 if (factor.Tokens.First().Name == "number")
@@ -159,7 +159,7 @@ public class Analyzer
         }
 
         if (str.Last() == 'm')
-            return new Num(Convert.ToDecimal(str.SkipLast(1)));
+            return new Num(Convert.ToDecimal(str[..^1]));
         else
             return new Num(Convert.ToDouble(str));
     }

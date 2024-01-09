@@ -1,4 +1,5 @@
 ﻿using MathFlow;
+using System.Diagnostics;
 
 namespace ConsoleApp1;
 
@@ -10,19 +11,28 @@ internal class Program
 
         MathFlow.ConsoleObservables.Console console = new();
 
+        Stopwatch stopwatch = new();
+
+        stopwatch.Start();
         var program = interpreter.Analyze(
             """
             num x;
             x = 5 + 4;
             num y = x + 5;
-            print(x);
+            print(-x);
             print(y);
             print(x + y);
             print(5 * 4);
             print(5+4*2);
-            print((5+4)*2);
+            print(-(5+4)*2);
+            print(5/7);
+            print(5/7m);
             """, console);
 
         program.Execute(console);
+        stopwatch.Stop();
+
+        Console.WriteLine();
+        Console.WriteLine($"Execution time in milliseconds = {stopwatch.ElapsedMilliseconds}");
     }
 }

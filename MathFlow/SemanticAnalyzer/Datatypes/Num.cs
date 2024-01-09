@@ -27,7 +27,7 @@ public struct Num
 
     public static Num operator +(Num a, Num b)
     {
-        if (a.GetType() == b.GetType())
+        if (a.Value.GetType() == b.Value.GetType())
             return new(a.Value + b.Value);
         else
             return new((decimal)a.Value + (decimal)b.Value);
@@ -35,7 +35,7 @@ public struct Num
 
     public static Num operator -(Num a, Num b)
     {
-        if (a.GetType() == b.GetType())
+        if (a.Value.GetType() == b.Value.GetType())
             return new(a.Value - b.Value);
         else
             return new((decimal)a.Value - (decimal)b.Value);
@@ -43,7 +43,7 @@ public struct Num
 
     public static Num operator *(Num a, Num b)
     {
-        if (a.GetType() == b.GetType())
+        if (a.Value.GetType() == b.Value.GetType())
             return new(a.Value * b.Value);
         else
             return new((decimal)a.Value * (decimal)b.Value);
@@ -51,7 +51,7 @@ public struct Num
 
     public static Num operator /(Num a, Num b)
     {
-        if (a.GetType() == b.GetType())
+        if (a.Value.GetType() == b.Value.GetType())
             return new(a.Value / b.Value);
         else
             return new((decimal)a.Value / (decimal)b.Value);
