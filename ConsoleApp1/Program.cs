@@ -13,7 +13,6 @@ internal class Program
 
         Stopwatch stopwatch = new();
 
-        stopwatch.Start();
         var program = interpreter.Analyze(
             """
             num x;
@@ -27,8 +26,10 @@ internal class Program
             print(-(5+4)*2);
             print(5/7);
             print(5/7m);
+            print(1.62345e2m);
             """, console);
 
+        stopwatch.Start();
         program.Execute(console);
         stopwatch.Stop();
 

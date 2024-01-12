@@ -3,6 +3,7 @@ using MathFlow.SemanticAnalyzer.Expression;
 using MathFlow.SemanticAnalyzer.Statements;
 using MathFlow.SyntaxAnalyzer;
 using System.Collections.Immutable;
+using System.Globalization;
 
 namespace MathFlow.SemanticAnalyzer;
 public class Analyzer
@@ -159,8 +160,8 @@ public class Analyzer
         }
 
         if (str.Last() == 'm')
-            return new Num(Convert.ToDecimal(str[..^1]));
+            return new Num(decimal.Parse(str[..^1], NumberStyles.AllowExponent | NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint));
         else
-            return new Num(Convert.ToDouble(str));
+            return new Num(double.Parse(str));
     }
 }
