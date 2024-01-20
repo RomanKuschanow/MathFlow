@@ -8,6 +8,7 @@ public static class Constants
 {
     public static ImmutableList<ILexemeDefinition> LexemeDefinitions => new List<ILexemeDefinition>()
     {
+        new RegexLexemeDefinition(new Regex(@"""(?:\\\\|\\""|\\n|\\r|[^""\\])*"""), LexType.String),
         new RegexLexemeDefinition(new Regex(GetKeywordPattern(_keywords)), LexType.Keyword),
         new RegexLexemeDefinition(new Regex(@"^[\p{L}@_]+[\p{L}@_\d]*"), LexType.Identifier),
         new RegexLexemeDefinition(new Regex(@"^\b\d+(?:\.\d+)?(?:[Ee][+-]?\d+)?m?"), LexType.Number),
@@ -19,6 +20,7 @@ public static class Constants
     private static string[] _keywords =
     {
         "num",
+        "string",
         "print",
     };
 

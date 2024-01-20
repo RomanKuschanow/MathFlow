@@ -1,6 +1,10 @@
-﻿namespace MathFlow.SemanticAnalyzer.Datatypes;
-public struct Num
+﻿using MathFlow.TypeSystem.Types;
+
+namespace MathFlow.TypeSystem.Instances;
+public class NumInstance : IInstance
 {
+    public InstantiateType Type => Num.Instance;
+
     private dynamic _value;
 
     public dynamic Value
@@ -14,18 +18,18 @@ public struct Num
         }
     }
 
-    public Num(dynamic value)
+    public NumInstance(dynamic value)
     {
         if (!(value is double || value is decimal)) throw new ArgumentException("", nameof(value));
 
         _value = value;
     }
 
-    public Num() : this(0d) { }
+    public NumInstance() : this(0d) { }
 
     public override string ToString() => $"{Value}";
 
-    public static Num operator +(Num a, Num b)
+    public static NumInstance operator +(NumInstance a, NumInstance b)
     {
         if (a.Value.GetType() == b.Value.GetType())
             return new(a.Value + b.Value);
@@ -33,7 +37,7 @@ public struct Num
             return new((decimal)a.Value + (decimal)b.Value);
     }
 
-    public static Num operator -(Num a, Num b)
+    public static NumInstance operator -(NumInstance a, NumInstance b)
     {
         if (a.Value.GetType() == b.Value.GetType())
             return new(a.Value - b.Value);
@@ -41,7 +45,7 @@ public struct Num
             return new((decimal)a.Value - (decimal)b.Value);
     }
 
-    public static Num operator *(Num a, Num b)
+    public static NumInstance operator *(NumInstance a, NumInstance b)
     {
         if (a.Value.GetType() == b.Value.GetType())
             return new(a.Value * b.Value);
@@ -49,7 +53,7 @@ public struct Num
             return new((decimal)a.Value * (decimal)b.Value);
     }
 
-    public static Num operator /(Num a, Num b)
+    public static NumInstance operator /(NumInstance a, NumInstance b)
     {
         if (a.Value.GetType() == b.Value.GetType())
             return new(a.Value / b.Value);
@@ -57,5 +61,5 @@ public struct Num
             return new((decimal)a.Value / (decimal)b.Value);
     }
 
-    public static Num operator -(Num a) => new(-a.Value);
+    public static NumInstance operator -(NumInstance a) => new(-a.Value);
 }

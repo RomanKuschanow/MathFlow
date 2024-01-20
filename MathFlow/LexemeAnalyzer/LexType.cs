@@ -2,6 +2,7 @@
 
 public enum LexType
 {
+    String,
     Keyword,
     Identifier,
     Operator,
