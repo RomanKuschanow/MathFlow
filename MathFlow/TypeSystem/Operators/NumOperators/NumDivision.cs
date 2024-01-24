@@ -9,7 +9,7 @@ public class NumDivision : Operator
 
     public static NumDivision Instance => _instance;
 
-    private NumDivision() : base(NumDivFunc.Instance.Arguments, NumDivFunc.Instance.Returns, OperatorType.Addition, NumDivFunc.Instance)
+    private NumDivision() : base(NumDivFunc.Instance.Arguments, NumDivFunc.Instance.Returns, OperatorType.Division, NumDivFunc.Instance)
     {
     }
 

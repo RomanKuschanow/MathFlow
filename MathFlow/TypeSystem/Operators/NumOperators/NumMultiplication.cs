@@ -9,7 +9,7 @@ public class NumMultiplication : Operator
 
     public static NumMultiplication Instance => _instance;
 
-    private NumMultiplication() : base(NumMulFunc.Instance.Arguments, NumMulFunc.Instance.Returns, OperatorType.Addition, NumMulFunc.Instance)
+    private NumMultiplication() : base(NumMulFunc.Instance.Arguments, NumMulFunc.Instance.Returns, OperatorType.Multiplication, NumMulFunc.Instance)
     {
     }
 

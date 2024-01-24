@@ -5,5 +5,6 @@ public enum OperatorType
     Subtraction,
     Multiplication,
     Division,
-    Negation
+    Negation,
+    Exponentiation
 }

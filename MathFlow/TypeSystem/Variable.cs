@@ -1,10 +1,13 @@
-﻿namespace MathFlow.TypeSystem;
+﻿using MathFlow.TypeSystem.Instances;
+
+namespace MathFlow.TypeSystem;
 public class Variable
 {
     public string Name { get; init; }
     public Type Type { get; init; }
+    public IInstance? Value { get; set; }
 
-    public Variable(string name, Type type)
+    public Variable(string name, Type type, IInstance? value = null)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -13,6 +16,8 @@ public class Variable
 
         Name = name;
         Type = type ?? throw new ArgumentNullException(nameof(type));
+
+        Value = value;
     }
 
     public override bool Equals(object? obj)
@@ -24,4 +29,6 @@ public class Variable
 
         return true;
     }
+
+    public override int GetHashCode() => base.GetHashCode();
 }

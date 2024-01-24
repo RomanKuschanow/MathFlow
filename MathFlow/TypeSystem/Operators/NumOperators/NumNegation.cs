@@ -9,7 +9,7 @@ public class NumNegation : Operator
 
     public static NumNegation Instance => _instance;
 
-    private NumNegation() : base(NumNegFunc.Instance.Arguments, NumNegFunc.Instance.Returns, OperatorType.Addition, NumNegFunc.Instance)
+    private NumNegation() : base(NumNegFunc.Instance.Arguments, NumNegFunc.Instance.Returns, OperatorType.Negation, NumNegFunc.Instance)
     {
     }
 

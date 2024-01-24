@@ -34,7 +34,13 @@ public class NumInstance : IInstance
         if (a.Value.GetType() == b.Value.GetType())
             return new(a.Value + b.Value);
         else
-            return new((decimal)a.Value + (decimal)b.Value);
+        {
+            try
+            {
+                return new((decimal)a.Value + (decimal)b.Value);
+            }
+            catch { return new(double.NaN); }
+        }
     }
 
     public static NumInstance operator -(NumInstance a, NumInstance b)
@@ -42,7 +48,13 @@ public class NumInstance : IInstance
         if (a.Value.GetType() == b.Value.GetType())
             return new(a.Value - b.Value);
         else
-            return new((decimal)a.Value - (decimal)b.Value);
+        {
+            try
+            {
+                return new((decimal)a.Value - (decimal)b.Value);
+            }
+            catch { return new(double.NaN); }
+        }
     }
 
     public static NumInstance operator *(NumInstance a, NumInstance b)
@@ -50,7 +62,13 @@ public class NumInstance : IInstance
         if (a.Value.GetType() == b.Value.GetType())
             return new(a.Value * b.Value);
         else
-            return new((decimal)a.Value * (decimal)b.Value);
+        {
+            try
+            {
+                return new((decimal)a.Value * (decimal)b.Value);
+            }
+            catch { return new(double.NaN); }
+        }
     }
 
     public static NumInstance operator /(NumInstance a, NumInstance b)
@@ -58,7 +76,13 @@ public class NumInstance : IInstance
         if (a.Value.GetType() == b.Value.GetType())
             return new(a.Value / b.Value);
         else
-            return new((decimal)a.Value / (decimal)b.Value);
+        {
+            try
+            {
+                return new((decimal)a.Value / (decimal)b.Value);
+            }
+            catch { return new(double.NaN); }
+        }
     }
 
     public static NumInstance operator -(NumInstance a) => new(-a.Value);

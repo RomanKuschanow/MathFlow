@@ -9,7 +9,7 @@ public class NumSubtraction : Operator
 
     public static NumSubtraction Instance => _instance;
 
-    private NumSubtraction() : base(NumSubFunc.Instance.Arguments, NumSubFunc.Instance.Returns, OperatorType.Addition, NumSubFunc.Instance)
+    private NumSubtraction() : base(NumSubFunc.Instance.Arguments, NumSubFunc.Instance.Returns, OperatorType.Subtraction, NumSubFunc.Instance)
     {
     }
 
