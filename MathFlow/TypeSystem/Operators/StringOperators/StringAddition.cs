@@ -1,4 +1,5 @@
-﻿using MathFlow.TypeSystem.Functions;
+﻿using MathFlow.SemanticAnalyzer.Scope;
+using MathFlow.TypeSystem.Functions;
 using MathFlow.TypeSystem.Instances;
 
 namespace MathFlow.TypeSystem.Operators.StringOperators;
@@ -14,6 +15,8 @@ public class StringAddition : Operator
 
     private class StringAddFunc : IFunction
     {
+        public Guid MemberId { get; init; } = Guid.NewGuid();
+
         private static StringAddFunc _instance = new();
 
         public static StringAddFunc Instance => _instance;
@@ -26,7 +29,7 @@ public class StringAddition : Operator
 
         public Type Returns => Types.String.Instance;
 
-        public IInstance Execute(params IInstance[] instances)
+        public IInstance Execute(IScope scope = null!, params IInstance[] instances)
         {
             if (!Arguments.Select(a => a.Type).SequenceEqual(instances.Select(i => i.Type)))
             {

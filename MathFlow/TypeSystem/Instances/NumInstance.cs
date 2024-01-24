@@ -1,4 +1,5 @@
-﻿using MathFlow.TypeSystem.Types;
+﻿using MathFlow.SemanticAnalyzer.Scope;
+using MathFlow.TypeSystem.Types;
 
 namespace MathFlow.TypeSystem.Instances;
 public class NumInstance : IInstance

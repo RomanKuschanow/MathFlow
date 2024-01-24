@@ -1,26 +1,33 @@
-﻿using System.Collections.Immutable;
+﻿using MathFlow.SemanticAnalyzer.Scope;
+using System.Collections.Immutable;
 
 namespace MathFlow.TypeSystem.Instances;
-public class Instance : IInstance
+public class Instance : IInstance, IScope
 {
     public InstantiateType Type { get; init; }
 
-    private Dictionary<Field, Instance> Fields { get; init; }
+    private ImmutableList<Field> Fields { get; init; }
+
+    public IScope ParentScope => throw new NotImplementedException();
 
     public Instance(InstantiateType type)
     {
         Type = type ?? throw new ArgumentNullException(nameof(type));
-        Fields = type.Fields.Select(f => new KeyValuePair<Field, Instance>(f, f.DefaultValue)).ToDictionary(f => f.Key, f => f.Value);
+        Fields = type.Fields.Select(f => new Field(f.Name, f.Type, f.Visibility, f.DefaultValue)).ToImmutableList();
     }
 
-    public Instance GetValue(Field field) => Fields[field];
-    public void SetValue(Field field, Instance instance)
+    public IInstance? GetValue(Guid id) => Fields.Where(f => f.Visibility == Visibility.Public).Single(f => f.MemberId == id).Value;
+    public void SetValue(Guid id, IInstance instance)
     {
+        var field = Fields.Where(f => f.Visibility == Visibility.Public).Single(f => f.MemberId == id);
+
         if (!field.Type.Equals(instance.Type))
         {
             throw new ArgumentException($"Cannot convert '{instance.Type}' to '{instance.Type}'", nameof(instance));
         }
 
-        Fields[field] = instance;
+        field.Value = instance;
     }
+
+    public IMember GetMember(Guid id) => Fields.Cast<IMember>().Single(m => m.MemberId == id);
 }

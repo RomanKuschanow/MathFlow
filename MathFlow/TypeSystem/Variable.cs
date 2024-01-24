@@ -1,8 +1,10 @@
 ﻿using MathFlow.TypeSystem.Instances;
 
 namespace MathFlow.TypeSystem;
-public class Variable
+public class Variable : IMember
 {
+    public Guid MemberId { get; init; } = Guid.NewGuid();
+
     public string Name { get; init; }
     public Type Type { get; init; }
     public IInstance? Value { get; set; }

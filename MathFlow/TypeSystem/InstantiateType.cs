@@ -11,7 +11,7 @@ public class InstantiateType : Type
         string name,
         TypeCategory category,
         Visibility visibility, 
-        IEnumerable<Field> fields,
+        IEnumerable<FieldDeclaration> fields,
         InstantiateType? inherits,
         bool isSealed,
         bool isSpecial)

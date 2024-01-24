@@ -1,4 +1,5 @@
-﻿using MathFlow.TypeSystem.Functions;
+﻿using MathFlow.SemanticAnalyzer.Scope;
+using MathFlow.TypeSystem.Functions;
 using MathFlow.TypeSystem.Instances;
 using MathFlow.TypeSystem.Types;
 
@@ -15,6 +16,8 @@ public class NumSubtraction : Operator
 
     private class NumSubFunc : IFunction
     {
+        public Guid MemberId { get; init; } = Guid.NewGuid();
+
         private static NumSubFunc _instance = new();
 
         public static NumSubFunc Instance => _instance;
@@ -27,7 +30,7 @@ public class NumSubtraction : Operator
 
         public Type Returns => Num.Instance;
 
-        public IInstance Execute(params IInstance[] instances)
+        public IInstance Execute(IScope scope = null!, params IInstance[] instances)
         {
             if (!Arguments.Select(a => a.Type).SequenceEqual(instances.Select(i => i.Type)))
             {

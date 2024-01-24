@@ -1,21 +1,23 @@
-﻿using System.Collections.Immutable;
+﻿using MathFlow.SemanticAnalyzer.Scope;
+using System.Collections.Immutable;
 
 namespace MathFlow.TypeSystem;
-public abstract class Type
+public abstract class Type : IScope
 {
     public string Name { get; init; }
 
     public TypeCategory Category { get; init; }
 
     public Visibility Visibility { get; init; }
-
-    public ImmutableList<Field> Fields { get; init; }
+    public ImmutableList<FieldDeclaration> Fields { get; }
+    public IScope? ParentScope { get; init; }
 
     public Type(
         string name, 
         TypeCategory category,
         Visibility visibility,
-        IEnumerable<Field> fields)
+        IEnumerable<FieldDeclaration> fields,
+        IScope scope = null!)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -25,8 +27,9 @@ public abstract class Type
         Name = name;
         Category = category;
         Visibility = visibility;
-        Fields = (fields ?? new List<Field>()).ToImmutableList();
+        Fields = (fields ?? throw new ArgumentNullException(nameof(fields))).ToImmutableList();
+        ParentScope = scope;
     }
 
-    public ImmutableList<Field> GetPublicFields() => Fields.Where(f => f.Visibility == Visibility.Public).ToImmutableList();
+    public IMember GetMember(Guid id) => throw new NotImplementedException();
 }

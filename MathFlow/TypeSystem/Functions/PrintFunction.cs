@@ -1,8 +1,11 @@
-﻿using MathFlow.TypeSystem.Instances;
+﻿using MathFlow.SemanticAnalyzer.Scope;
+using MathFlow.TypeSystem.Instances;
 
 namespace MathFlow.TypeSystem.Functions;
 public class PrintFunction : IFunction
 {
+    public Guid MemberId { get; init; } = Guid.NewGuid();
+
     public List<Variable> Arguments => new()
     {
         new("string", Types.String.Instance)
@@ -17,7 +20,7 @@ public class PrintFunction : IFunction
         _print = print;
     }
 
-    public IInstance Execute(params IInstance[] instances)
+    public IInstance Execute(IScope scope = null!, params IInstance[] instances)
     {
         if (instances.Length != 1)
         {
