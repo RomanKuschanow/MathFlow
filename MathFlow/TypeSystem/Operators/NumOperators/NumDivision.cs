@@ -2,6 +2,7 @@
 using MathFlow.TypeSystem.Functions;
 using MathFlow.TypeSystem.Instances;
 using MathFlow.TypeSystem.Types;
+using System.Collections.Immutable;
 using System.Threading.Tasks.Dataflow;
 
 namespace MathFlow.TypeSystem.Operators.NumOperators;
@@ -23,11 +24,11 @@ public class NumDivision : Operator
 
         public static NumDivFunc Instance => _instance;
 
-        public List<Variable> Arguments => new()
+        public ImmutableList<Variable> Arguments => new List<Variable>()
         {
             new("a", Num.Instance),
             new("b", Num.Instance)
-        };
+        }.ToImmutableList();
 
         public Type Returns => Num.Instance;
 

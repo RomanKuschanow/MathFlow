@@ -16,10 +16,10 @@ public class Instance : IInstance, IScope
         Fields = type.Fields.Select(f => new Field(f.Name, f.Type, f.Visibility, f.DefaultValue)).ToImmutableList();
     }
 
-    public IInstance? GetValue(Guid id) => Fields.Where(f => f.Visibility == Visibility.Public).Single(f => f.MemberId == id).Value;
+    public IInstance? GetValue(Guid id) => ((Field)GetMember(id)).Value;
     public void SetValue(Guid id, IInstance instance)
     {
-        var field = Fields.Where(f => f.Visibility == Visibility.Public).Single(f => f.MemberId == id);
+        var field = (Field)GetMember(id);
 
         if (!field.Type.Equals(instance.Type))
         {
@@ -29,5 +29,5 @@ public class Instance : IInstance, IScope
         field.Value = instance;
     }
 
-    public IMember GetMember(Guid id) => Fields.Cast<IMember>().Single(m => m.MemberId == id);
+    public IMember GetMember(Guid id) => Fields.Where(f => f.Visibility == Visibility.Public).Cast<IMember>().Single(m => m.MemberId == id);
 }

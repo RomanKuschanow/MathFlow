@@ -2,6 +2,7 @@
 using MathFlow.TypeSystem.Functions;
 using MathFlow.TypeSystem.Instances;
 using MathFlow.TypeSystem.Types;
+using System.Collections.Immutable;
 
 namespace MathFlow.TypeSystem.Operators.NumOperators;
 internal class NumExponentiation : Operator
@@ -22,11 +23,11 @@ internal class NumExponentiation : Operator
 
         public static NumExpFunc Instance => _instance;
 
-        public List<Variable> Arguments => new()
+        public ImmutableList<Variable> Arguments => new List<Variable>()
         {
             new("a", Num.Instance),
             new("b", Num.Instance)
-        };
+        }.ToImmutableList();
 
         public Type Returns => Num.Instance;
 

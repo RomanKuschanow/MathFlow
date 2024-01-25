@@ -1,13 +1,14 @@
 ﻿using MathFlow.SemanticAnalyzer.Scope;
 using MathFlow.TypeSystem.Functions;
 using MathFlow.TypeSystem.Instances;
+using System.Collections.Immutable;
 
 namespace MathFlow.TypeSystem.Operators;
 public class Operator : IFunction
 {
     public Guid MemberId { get; init; } = Guid.NewGuid();
 
-    public List<Variable> Arguments { get; init; }
+    public ImmutableList<Variable> Arguments { get; init; }
 
     public Type Returns { get; init; }
 
@@ -18,7 +19,7 @@ public class Operator : IFunction
 
     public Operator(IEnumerable<Variable> args, Type returns, OperatorType operatorType, IFunction function)
     {
-        Arguments = (args ?? throw new ArgumentNullException(nameof(args))).ToList();
+        Arguments = (args ?? throw new ArgumentNullException(nameof(args))).ToImmutableList();
         Returns = returns ?? throw new ArgumentNullException(nameof(returns));
         OperatorType = operatorType;
 

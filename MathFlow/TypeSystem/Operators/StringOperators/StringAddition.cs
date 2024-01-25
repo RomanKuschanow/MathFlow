@@ -1,6 +1,7 @@
 ﻿using MathFlow.SemanticAnalyzer.Scope;
 using MathFlow.TypeSystem.Functions;
 using MathFlow.TypeSystem.Instances;
+using System.Collections.Immutable;
 
 namespace MathFlow.TypeSystem.Operators.StringOperators;
 public class StringAddition : Operator
@@ -21,11 +22,11 @@ public class StringAddition : Operator
 
         public static StringAddFunc Instance => _instance;
 
-        public List<Variable> Arguments => new()
+        public ImmutableList<Variable> Arguments => new List<Variable>()
         {
             new("a", Types.String.Instance),
             new("b", Types.String.Instance)
-        };
+        }.ToImmutableList();
 
         public Type Returns => Types.String.Instance;
 

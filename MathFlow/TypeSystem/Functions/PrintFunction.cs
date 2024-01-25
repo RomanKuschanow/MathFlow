@@ -1,15 +1,16 @@
 ﻿using MathFlow.SemanticAnalyzer.Scope;
 using MathFlow.TypeSystem.Instances;
+using System.Collections.Immutable;
 
 namespace MathFlow.TypeSystem.Functions;
 public class PrintFunction : IFunction
 {
     public Guid MemberId { get; init; } = Guid.NewGuid();
 
-    public List<Variable> Arguments => new()
+    public ImmutableList<Variable> Arguments => new List<Variable>()
     {
         new("string", Types.String.Instance)
-    };
+    }.ToImmutableList();
 
     public Type Returns => Types.Void.Instance;
 
