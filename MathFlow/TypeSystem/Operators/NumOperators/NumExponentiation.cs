@@ -40,18 +40,20 @@ internal class NumExponentiation : Operator
             var a = ((NumInstance)instances[0]).Value;
             var b = ((NumInstance)instances[1]).Value;
 
-            if (a.GetType() == b.GetType() && a.GetType() == typeof(double))
-            {
-                return new NumInstance(Math.Pow(a, b));
-            }
-            else
-            {
-                try
-                {
-                    return new NumInstance(DecimalPow((decimal)a, (decimal)b));
-                }
-                catch { return new NumInstance(double.NaN); }
-            }
+            return new NumInstance(Math.Pow((double)a, (double)b));
+
+            //if (a.GetType() == b.GetType() && a.GetType() == typeof(double))
+            //{
+            //    return new NumInstance(Math.Pow(a, b));
+            //}
+            //else
+            //{
+            //    try
+            //    {
+            //        return new NumInstance(DecimalPow((decimal)a, (decimal)b));
+            //    }
+            //    catch { return new NumInstance(double.NaN); }
+            //}
         }
 
         private static decimal DecimalLn(decimal x)
@@ -90,9 +92,70 @@ internal class NumExponentiation : Operator
             }
             return result;
         }
+
+        private static decimal DecimalPowToInt(decimal number, int exponent)
+        {
+            decimal result = 1m;
+            for (int i = 0; i < exponent; i++)
+            {
+                result *= number;
+            }
+            return result;
+        }
+
+        public static decimal DecimalRoot(decimal a, int n, decimal tolerance = 1e-28m)
+        {
+            if (a < 0 && n % 2 == 0)
+            {
+                throw new ArgumentException("Negative number cannot have an even root");
+            }
+
+            decimal x = a != 0 ? a / 2 : 1M;
+
+            while (true)
+            {
+                decimal xPowNMinus1 = DecimalPowToInt(x, n - 1);
+                decimal xNew = x - (DecimalPowToInt(x, n) - a) / (n * xPowNMinus1);
+
+                if (Math.Abs(x - xNew) < tolerance)
+                    return xNew;
+
+                x = xNew;
+            }
+        }
+
         private static decimal DecimalPow(decimal baseNumber, decimal exponent)
         {
-            return DecimalExp(exponent * DecimalLn(baseNumber));
+            if (exponent == 0)
+            {
+                return 1m;
+            }
+            if (baseNumber == 0)
+            {
+                return 0m;
+            }
+            if (baseNumber < 0)
+            {
+                if (exponent - Math.Floor(exponent) == 0)
+                {
+                    if (exponent > 0)
+                    {
+                        return DecimalPowToInt(baseNumber, (int)exponent);
+                    }
+                    else
+                    {
+                        return 1m / DecimalPowToInt(baseNumber, (int)-exponent);
+                    }
+                }
+                else
+                {
+                    throw new ArgumentException("Unable to raise a negative base to a fractional exponent", nameof(exponent));
+                }
+            }
+            else
+            {
+                return DecimalExp(exponent * DecimalLn(baseNumber));
+            }
         }
     }
 }
