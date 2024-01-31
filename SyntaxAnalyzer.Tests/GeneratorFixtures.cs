@@ -2,6 +2,7 @@
 using SyntaxAnalyzer.Rules;
 using SyntaxAnalyzer.Rules.Symbols;
 using MathFlow;
+using SyntaxAnalyzer.Generator.Actions;
 
 namespace SyntaxAnalyzer.Tests;
 public class GeneratorFixtures
@@ -30,6 +31,49 @@ public class GeneratorFixtures
     }
 
     [Fact]
+    public void GivenRulesWithoutSimpleRule_WhenGenerateParsingTable_ThenExceptionWasThrown()
+    {
+        // Arrange
+        Grammar grammar = new(new List<List<string>>()
+        {
+            new() { "S'", "S" },
+            new() { "S", "S", "C" },
+            new() { "S", "C" },
+            new() { "C", "C", "c" },
+            new() { "C", "C", "d" },
+        });
+        RuleAnalyzer sut = new();
+
+        // Act
+        var table = sut.Invoking(s =>s.Analyze(grammar))
+        // Assert
+            .Should().Throw<Exception>()
+            .WithMessage("The list of rules must contain at least one rule that not contains any non terminal character");
+    }
+
+    [Fact]
+    public void GivenRulesWithTwoHeaderRule_WhenGenerateParsingTable_ThenExceptionWasThrown()
+    {
+        // Arrange
+        Grammar grammar = new(new List<List<string>>()
+        {
+            new() { "S'", "S" },
+            new() { "D'", "S" },
+            new() { "S", "S", "C" },
+            new() { "S", "C" },
+            new() { "C", "c" },
+            new() { "C", "d" },
+        });
+        RuleAnalyzer sut = new();
+
+        // Act
+        var table = sut.Invoking(s =>s.Analyze(grammar))
+        // Assert
+            .Should().Throw<Exception>()
+            .WithMessage("The list of rules must contain exactly one main rule");
+    }
+
+    [Fact]
     public void GivenNonconflictRulesWithOneHeaderRule_WhenGenerateParsingTable_ThenExpectedResult()
     {
         // Arrange
@@ -50,6 +94,25 @@ public class GeneratorFixtures
         table.Conflicts.Should().BeEmpty();
         table.Actions.Should().NotBeEmpty();
         table.Actions.Length.Should().Be(20);
+    }
+
+    [Fact]
+    public void GivenNonconflictRulesWithALotOfRules_WhenGenerateParsingTable_ThenExpectedResult()
+    {
+        // Arrange
+        RuleAnalyzer sut = new();
+
+        // Act
+        var table = sut.Analyze(Constants.Rules);
+
+        // Assert
+        table.Conflicts.Should().BeEmpty();
+        table.Actions.Should().NotBeEmpty();
+        table.Actions.Length.Should().Be(333);
+        table.Actions.Where(a => a is GotoAction).Count().Should().Be(72);
+        table.Actions.Where(a => a is ReduceAction).Count().Should().Be(152);
+        table.Actions.Where(a => a is ShiftAction).Count().Should().Be(108);
+        table.Actions.Where(a => a is AcceptAction).Count().Should().Be(1);
     }
 
     [Fact]

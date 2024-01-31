@@ -19,5 +19,5 @@ public record AcceptAction : IAction
         InitState = initState ?? throw new ArgumentNullException(nameof(initState));
     }
 
-    public override string ToString() => "Accept";
+    public override string ToString() => $"Accept [{InitState}] [$]";
 }

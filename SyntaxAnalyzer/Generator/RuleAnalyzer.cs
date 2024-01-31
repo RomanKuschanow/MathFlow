@@ -32,12 +32,12 @@ public class RuleAnalyzer
 
         for (int i = 0; i < states.Count; i++)
         {
-            if (states[i].Closure.Length < 2)
+            var uniqueSymbols = states[i].Closure.Select(p => p.FollowingSymbol).Where(s => s is not RuleEndSymbol).Distinct();
+
+            if (uniqueSymbols.Count() < 1)
             {
                 continue;
             }
-
-            var uniqueSymbols = states[i].Closure.Select(p => p.FollowingSymbol).Where(s => s is not RuleEndSymbol).Distinct();
 
             foreach (ISymbol symbol in uniqueSymbols)
             {
