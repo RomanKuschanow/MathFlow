@@ -1,7 +1,6 @@
 ﻿using MathFlow.ConsoleObservables;
-using MathFlow.LexemeAnalyzer;
 using MathFlow.SemanticAnalyzer;
-using MathFlow.SyntaxAnalyzer;
+using SyntaxAnalyzer;
 
 namespace MathFlow;
 public class Interpreter

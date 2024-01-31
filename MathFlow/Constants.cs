@@ -1,5 +1,6 @@
-﻿using MathFlow.LexemeAnalyzer;
-using MathFlow.SyntaxAnalyzer;
+﻿using Lexer.LexemeDefinitions;
+using SyntaxAnalyzer;
+using SyntaxAnalyzer.Rules;
 using System.Collections.Immutable;
 using System.Text.RegularExpressions;
 
@@ -8,13 +9,13 @@ public static class Constants
 {
     public static ImmutableList<ILexemeDefinition> LexemeDefinitions => new List<ILexemeDefinition>()
     {
-        new RegexLexemeDefinition(new Regex(@"""(?:\\\\|\\""|\\n|\\r|[^""\\])*"""), LexType.String),
-        new RegexLexemeDefinition(new Regex(GetKeywordPattern(_keywords)), LexType.Keyword),
-        new RegexLexemeDefinition(new Regex(@"^[\p{L}@_]+[\p{L}@_\d]*"), LexType.Identifier),
-        new RegexLexemeDefinition(new Regex(@"^\b\d+(?:\.\d+)?(?:[Ee][+-]?\d+)?m?"), LexType.Number),
-        new RegexLexemeDefinition(new Regex(@"^[-+*/=]"), LexType.Operator),
-        new RegexLexemeDefinition(new Regex(@"^[();]"), LexType.Separator),
-        new RegexLexemeDefinition(new Regex(@"^\s*"), LexType.Space),
+        new RegexLexemeDefinition(new Regex(@"""(?:\\\\|\\""|\\n|\\r|[^""\\])*"""), "String"),
+        new RegexLexemeDefinition(new Regex(GetKeywordPattern(_keywords)), "Keyword"),
+        new RegexLexemeDefinition(new Regex(@"^[\p{L}@_]+[\p{L}@_\d]*"), "Identifier"),
+        new RegexLexemeDefinition(new Regex(@"^\b\d+(?:\.\d+)?(?:[Ee][+-]?\d+)?m?"), "Number"),
+        new RegexLexemeDefinition(new Regex(@"^[-+*/=]"), "Operator"),
+        new RegexLexemeDefinition(new Regex(@"^[();]"), "Separator"),
+        new RegexLexemeDefinition(new Regex(@"^\s*"), "Space", true),
     }.ToImmutableList();
 
     private static string[] _keywords =
@@ -24,32 +25,32 @@ public static class Constants
         "print",
     };
 
-    public static ImmutableList<IRule> Rules => new List<IRule>()
+    public static Grammar Rules => new(new List<List<string>>()
     {
-        new Rule("Program", "StatementList"),
-        new Rule("StatementList", "StatementList", "Statement"),
-        new Rule("StatementList", "Statement"),
-        new Rule("Statement", "Declaration", ";"),
-        new Rule("Statement", "Assignment", ";"),
-        new Rule("Statement", "PrintStatement", ";"),
-        new Rule("Declaration", "type", "id"),
-        new Rule("Declaration", "type", "id", "=", "Expression"),
-        new Rule("Assignment", "id", "=", "Expression"),
-        new Rule("PrintStatement", "print", "(", "Expression", ")"),
-        new Rule("Expression", "Expression", "+", "Term"),
-        new Rule("Expression", "Expression", "-", "Term"),
-        new Rule("Expression", "Term"),
-        new Rule("Term", "Term", "*", "Exponent"),
-        new Rule("Term", "Term", "/", "Exponent"),
-        new Rule("Term", "Exponent"),
-        new Rule("Exponent", "Factor", "**", "Exponent"),
-        new Rule("Exponent", "Factor"),
-        new Rule("Factor", "(", "Expression", ")"),
-        new Rule("Factor", "number"),
-        new Rule("Factor", "id"),
-        new Rule("Factor", "Unary"),
-        new Rule("Unary", "-", "Factor"),
-    }.ToImmutableList();
+        new() { "Program", "StatementList" },
+        new() { "StatementList", "StatementList", "Statement" },
+        new() { "StatementList", "Statement" },
+        new() { "Statement", "Declaration", ";" },
+        new() { "Statement", "Assignment", ";" },
+        new() { "Statement", "PrintStatement", ";" },
+        new() { "Declaration", "type", "id" },
+        new() { "Declaration", "type", "id", "=", "Expression" },
+        new() { "Assignment", "id", "=", "Expression" },
+        new() { "PrintStatement", "print", "(", "Expression", ")" },
+        new() { "Expression", "Expression", "+", "Term" },
+        new() { "Expression", "Expression", "-", "Term" },
+        new() { "Expression", "Term" },
+        new() { "Term", "Term", "*", "Exponent" },
+        new() { "Term", "Term", "/", "Exponent" },
+        new() { "Term", "Exponent" },
+        new() { "Exponent", "Factor", "**", "Exponent" },
+        new() { "Exponent", "Factor" },
+        new() { "Factor", "(", "Expression", ")" },
+        new() { "Factor", "number" },
+        new() { "Factor", "id" },
+        new() { "Factor", "Unary" },
+        new() { "Unary", "-", "Factor" },
+    });
 
     public static ImmutableList<Dictionary<string, int>> Actions => new List<Dictionary<string, int>>()
     {
