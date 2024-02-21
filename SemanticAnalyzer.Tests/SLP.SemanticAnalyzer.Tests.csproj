@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SemanticAnalyzer\SemanticAnalyzer.csproj" />
+    <ProjectReference Include="..\SemanticAnalyzer\SPL.SemanticAnalyzer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

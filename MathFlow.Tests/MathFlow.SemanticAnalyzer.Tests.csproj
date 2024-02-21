@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lexer\Lexer.csproj" />
-    <ProjectReference Include="..\MathFlow\MathFlow.csproj" />
+    <ProjectReference Include="..\MathFlow\MathFlow.System.csproj" />
   </ItemGroup>
 
 </Project>

@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MathFlow\MathFlow.csproj" />
+    <ProjectReference Include="..\MathFlow\MathFlow.System.csproj" />
     <ProjectReference Include="..\SyntaxAnalyzer\SyntaxAnalyzer.csproj" />
   </ItemGroup>
 

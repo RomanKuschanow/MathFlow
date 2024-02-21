@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34219.65
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathFlow", "MathFlow\MathFlow.csproj", "{89C13B47-8AFD-4C10-A2CB-FF07D70CA39A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathFlow.System", "MathFlow\MathFlow.System.csproj", "{89C13B47-8AFD-4C10-A2CB-FF07D70CA39A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathFlow.Tests", "MathFlow.Tests\MathFlow.Tests.csproj", "{AC66419D-47A8-4B74-8CC7-DC20E1FC7AED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathFlow.SemanticAnalyzer.Tests", "MathFlow.Tests\MathFlow.SemanticAnalyzer.Tests.csproj", "{AC66419D-47A8-4B74-8CC7-DC20E1FC7AED}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lexer", "Lexer\Lexer.csproj", "{A85C9436-02D0-43AA-A78E-C9510373E06C}"
 EndProject
@@ -17,11 +17,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lexer.Tests", "Lexer.Tests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyntaxAnalyzer.Tests", "SyntaxAnalyzer.Tests\SyntaxAnalyzer.Tests.csproj", "{D6AD896C-5709-4975-8E23-3D95C28CDEEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemanticAnalyzer", "SemanticAnalyzer\SemanticAnalyzer.csproj", "{C4411547-F674-47CA-B52D-4A029D032B35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPL.SemanticAnalyzer", "SemanticAnalyzer\SPL.SemanticAnalyzer.csproj", "{C4411547-F674-47CA-B52D-4A029D032B35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemanticAnalyzer.Tests", "SemanticAnalyzer.Tests\SemanticAnalyzer.Tests.csproj", "{41288117-803D-438D-A734-56B8A76165E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SLP.SemanticAnalyzer.Tests", "SemanticAnalyzer.Tests\SLP.SemanticAnalyzer.Tests.csproj", "{41288117-803D-438D-A734-56B8A76165E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPL", "SPL\SPL.csproj", "{8D31B9F2-25D3-422C-AD0C-7A564FDF87FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPL.System", "SPL\SPL.System.csproj", "{8D31B9F2-25D3-422C-AD0C-7A564FDF87FD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SPL", "SPL", "{D26B7691-9B74-4093-945F-85AAA21E74AF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MathFlow", "MathFlow", "{8C68C750-32D0-492F-9B1E-9E401A41FC24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathFlow.SemanticAnalyzer", "MathFlow.SemanticAnalyzer\MathFlow.SemanticAnalyzer.csproj", "{9F052745-79A1-4B44-96D1-3BEAC37DDC02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,15 +71,23 @@ Global
 		{8D31B9F2-25D3-422C-AD0C-7A564FDF87FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D31B9F2-25D3-422C-AD0C-7A564FDF87FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D31B9F2-25D3-422C-AD0C-7A564FDF87FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F052745-79A1-4B44-96D1-3BEAC37DDC02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F052745-79A1-4B44-96D1-3BEAC37DDC02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F052745-79A1-4B44-96D1-3BEAC37DDC02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F052745-79A1-4B44-96D1-3BEAC37DDC02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{89C13B47-8AFD-4C10-A2CB-FF07D70CA39A} = {8C68C750-32D0-492F-9B1E-9E401A41FC24}
 		{AC66419D-47A8-4B74-8CC7-DC20E1FC7AED} = {0ED98EC1-8FBF-4256-AB90-66E59E7CDED7}
 		{B5C17A3F-DE59-4D49-895D-AA1B2EAF7E18} = {0ED98EC1-8FBF-4256-AB90-66E59E7CDED7}
 		{D6AD896C-5709-4975-8E23-3D95C28CDEEC} = {0ED98EC1-8FBF-4256-AB90-66E59E7CDED7}
+		{C4411547-F674-47CA-B52D-4A029D032B35} = {D26B7691-9B74-4093-945F-85AAA21E74AF}
 		{41288117-803D-438D-A734-56B8A76165E1} = {0ED98EC1-8FBF-4256-AB90-66E59E7CDED7}
+		{8D31B9F2-25D3-422C-AD0C-7A564FDF87FD} = {D26B7691-9B74-4093-945F-85AAA21E74AF}
+		{9F052745-79A1-4B44-96D1-3BEAC37DDC02} = {8C68C750-32D0-492F-9B1E-9E401A41FC24}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A2553AB2-16F3-461E-A366-3FF3C3979B8C}
