@@ -19,12 +19,11 @@ public class RegexLexemeDefinition : ILexemeDefinition
         IsIgnored = isIgnored;
     }
 
-    public bool TryGetLexeme(string text, out Lexeme lexeme)
+    public Lexeme? TryGetLexeme(string text)
     {
         Match match;
         match = Regex.Match(text);
 
-        lexeme = new(Type, match.Value);
-        return match.Success;
+        return match.Success ? new(Type, match.Value) : null;
     }
 }

@@ -1,15 +1,37 @@
 ﻿using Lexer;
+using Lexer.LexemeDefinitions;
+using System.Collections.Immutable;
+using System.Text.RegularExpressions;
 
 namespace MathFlow.Tests.LexemeAnalyzerFixtures;
 public class LexerFixtures
 {
+    public static ImmutableList<ILexemeDefinition> LexemeDefinitions => new List<ILexemeDefinition>()
+    {
+        new RegexLexemeDefinition(new Regex(@"""(?:\\\\|\\""|\\n|\\r|[^""\\])*"""), "String"),
+        new RegexLexemeDefinition(new Regex(GetKeywordPattern(_keywords)), "Keyword"),
+        new RegexLexemeDefinition(new Regex(@"^[\p{L}@_]+[\p{L}@_\d]*"), "Identifier"),
+        new RegexLexemeDefinition(new Regex(@"^\b\d+(?:\.\d+)?(?:[Ee][+-]?\d+)?m?"), "Number"),
+        new RegexLexemeDefinition(new Regex(@"^[-+*/=]"), "Operator"),
+        new RegexLexemeDefinition(new Regex(@"^[();]"), "Separator"),
+        new RegexLexemeDefinition(new Regex(@"^\s*"), "Space", true),
+    }.ToImmutableList();
+
+    private static string[] _keywords =
+{
+        "num",
+        "string",
+        "print",
+    };
+
+    private static string GetKeywordPattern(string[] keywords) => $"^{string.Join("|", keywords)}";
 
     [Theory]
     [MemberData(nameof(CodeWithLexemes))]
     public void GivenCode_WhenAnalyze_ThenLexemeListContainsGivenLexemes(string code, List<Lexeme> lexemes)
     {
         // Arrange
-        var sut = new LexemeAnalyzer(Constants.LexemeDefinitions);
+        var sut = new LexemeAnalyzer(LexemeDefinitions);
 
         // Act
         var result = sut.Analyze(code);

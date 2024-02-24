@@ -86,3 +86,18 @@ public class RegexLexemeDefinitionFixtures
     }
 
 }
+
+public static class AdapterExtension
+{
+    public static bool TryGetLexeme(this RegexLexemeDefinition sut, string text, out Lexeme lexeme)
+    {
+        lexeme = sut.TryGetLexeme(text);
+
+        if (lexeme is not null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+}
