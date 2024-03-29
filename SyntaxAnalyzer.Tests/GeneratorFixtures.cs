@@ -1,12 +1,38 @@
 ﻿using SyntaxAnalyzer.Generator;
 using SyntaxAnalyzer.Rules;
 using SyntaxAnalyzer.Rules.Symbols;
-using MathFlow;
 using SyntaxAnalyzer.Generator.Actions;
 
 namespace SyntaxAnalyzer.Tests;
 public class GeneratorFixtures
 {
+    private static Grammar Rules => new(new List<List<string>>()
+    {
+        new() { "Program", "StatementList" },
+        new() { "StatementList", "StatementList", "Statement" },
+        new() { "StatementList", "Statement" },
+        new() { "Statement", "Declaration", ";" },
+        new() { "Statement", "Assignment", ";" },
+        new() { "Statement", "PrintStatement", ";" },
+        new() { "Declaration", "type", "id" },
+        new() { "Declaration", "type", "id", "=", "Expression" },
+        new() { "Assignment", "id", "=", "Expression" },
+        new() { "PrintStatement", "print", "(", "Expression", ")" },
+        new() { "Expression", "Expression", "+", "Term" },
+        new() { "Expression", "Expression", "-", "Term" },
+        new() { "Expression", "Term" },
+        new() { "Term", "Term", "*", "Exponent" },
+        new() { "Term", "Term", "/", "Exponent" },
+        new() { "Term", "Exponent" },
+        new() { "Exponent", "Factor", "**", "Exponent" },
+        new() { "Exponent", "Factor" },
+        new() { "Factor", "(", "Expression", ")" },
+        new() { "Factor", "number" },
+        new() { "Factor", "id" },
+        new() { "Factor", "Unary" },
+        new() { "Unary", "-", "Factor" },
+    });
+
     [Fact]
     public void GivenRules_WhenCreateGrammar_ThenRulesParsedCorrect()
     {
@@ -103,7 +129,7 @@ public class GeneratorFixtures
         RuleAnalyzer sut = new();
 
         // Act
-        var table = sut.Analyze(Constants.Rules);
+        var table = sut.Analyze(Rules);
 
         // Assert
         table.Conflicts.Should().BeEmpty();
