@@ -8,5 +8,7 @@ public interface IOperator
 
     IType ResultType { get; }
 
-    IInstance Calculate(List<IInstance> args);
+    OperatorType OperatorType { get; }
+
+    IInstance<IType> Calculate(List<IInstance<IType>> args);
 }

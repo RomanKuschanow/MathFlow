@@ -5,10 +5,10 @@ public class StringInstance : IInstance<StringType>
 {
     public StringType Type => StringType.Instance;
 
-    internal string _value;
+    internal string Value { get; set; }
 
     public StringInstance(string value)
     {
-        _value = value;
+        Value = value;
     }
 }

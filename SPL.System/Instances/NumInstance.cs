@@ -5,10 +5,10 @@ public class NumInstance : IInstance<NumType>
 {
     public NumType Type => NumType.Instance;
 
-    internal double _value;
+    internal double Value { get; set; }
 
     public NumInstance(double value)
     {
-        _value = value;
+        Value = value;
     }
 }

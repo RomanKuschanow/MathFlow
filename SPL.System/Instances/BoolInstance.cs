@@ -5,10 +5,10 @@ public class BoolInstance : IInstance<BoolType>
 {
     public BoolType Type => BoolType.Instance;
 
-    internal bool _value;
+    internal bool Value { get; set; }
 
     public BoolInstance(bool value = false)
     {
-        _value = value;
+        Value = value;
     }
 }
