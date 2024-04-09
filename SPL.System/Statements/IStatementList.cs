@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SPL.System.Statements;
+﻿namespace SPL.System.Statements;
 public interface IStatementList : IScope
 {
+    LinkedList<IStatement> Statements { get; }
 }
