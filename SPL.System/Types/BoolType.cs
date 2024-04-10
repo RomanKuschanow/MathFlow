@@ -81,7 +81,13 @@ public class BoolType : IType
             }),
     };
 
-    public IInstance<IType> GetInstance(params object[] args) => (IInstance<IType>)new BoolInstance((bool)args[0]);
+    public IInstance<IType> GetInstance(params object[] args)
+    {
+        if (args.Length == 0)
+            return (IInstance<IType>)new BoolInstance();
+
+        return (IInstance<IType>)new BoolInstance((bool)args[0]);
+    }
 
     public bool IsInstance(IInstance<IType> instance) => instance is IInstance<BoolType>;
 }

@@ -54,13 +54,13 @@ public class StringType : IType
                     throw new InvalidDataException();
             }), 
         new Operator(
-            operandTypes: new List<IType>() { Instance, NumType.Instance },
+            operandTypes: new List<IType>() { Instance, FloatType.Instance },
             resultType: Instance,
             operatorType: OperatorType.Multiplication,
             func: args =>
             {
                 var a = ((StringInstance)args[0]).Value;
-                var b = ((NumInstance)args[1]).Value;
+                var b = ((FloatInstance)args[1]).Value;
 
                 if (b != (int)b || b < 0)
                     throw new InvalidDataException();
@@ -74,7 +74,13 @@ public class StringType : IType
             }), 
     };
 
-    public IInstance<IType> GetInstance(params object[] args) => (IInstance<IType>)new StringInstance((string)args[0]);
+    public IInstance<IType> GetInstance(params object[] args)
+    {
+        if (args.Length == 0)
+            return (IInstance<IType>)new StringInstance(null!);
+
+        return (IInstance<IType>)new StringInstance((string)args[0]);
+    }
 
     public bool IsInstance(IInstance<IType> instance) => instance is IInstance<StringType>;
 }

@@ -5,17 +5,43 @@ namespace SPL.System.Statements;
 public interface IScope
 {
     IScope Parent { get; }
-    Dictionary<string, IInstance<IType>> Values { get; }
+    List<Variable> Variables { get; }
 
-    bool CreateValue(string name, IInstance<IType> value) => Values.TryAdd(name, value);
+    List<Variable> GetAllVariablesInScope();
+
+    void CreateVariable(string name, IType type, IInstance<IType> value = null!)
+    {
+        if (GetAllVariablesInScope().Select(v => v.Name).Contains(name))
+            throw new InvalidDataException($"value with name '{name}' already exists");
+
+        Variables.Add(new Variable(name, type, value));
+    }
 
     IInstance<IType> GetValue(string name)
     {
-        if (Values.TryGetValue(name, out var value))
-            return value;
+        var variable = GetAllVariablesInScope().SingleOrDefault(v => v.Name == name);
 
-        throw new InvalidDataException(nameof(name));
+        if (variable is not null)
+            return variable.Instance;
+
+        throw new InvalidDataException($"variable named '{name}' does not exists");
     }
 
-    //TODO: SetValue
+    void AssignVariable(string name, IInstance<IType> value)
+    {
+        var variable = GetAllVariablesInScope().SingleOrDefault(v => v.Name == name);
+
+        if (variable is not null)
+        {
+            if (variable.Type == value.Type)
+            {
+                variable.SetValue(value);
+                return;
+            }
+
+            throw new InvalidDataException($"cannot assign type '{value.Type.Name}' to '{variable.Type.Name}'");
+        }
+
+        throw new InvalidDataException($"variable named '{name}' does not exists");
+    }
 }

@@ -8,6 +8,11 @@ public class OperatorsManager
 
     public OperatorsManager(List<IOperator> operators)
     {
+        if (operators is null)
+        {
+            throw new ArgumentNullException(nameof(operators));
+        }
+
         if (operators.GroupBy(o => new { o.Operands, o.OperatorType }).Where(g => g.Count() > 1).SelectMany(g => g).Any())
             throw new InvalidDataException();
 

@@ -1,13 +1,13 @@
 ﻿using SPL.System.Types;
 
 namespace SPL.System.Instances;
-public class NumInstance : IInstance<NumType>
+public class IntInstance : IInstance<IntType>
 {
-    public NumType Type => NumType.Instance;
+    public IntType Type => IntType.Instance;
 
     internal double Value { get; set; }
 
-    public NumInstance(double value)
+    public IntInstance(long value)
     {
         Value = value;
     }

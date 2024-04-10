@@ -6,10 +6,12 @@ public class Root : IScope
 {
     public IScope Parent => null!;
 
-    public Dictionary<string, IInstance<IType>> Values { get; init; }
+    public List<Variable> Variables { get; init; }
 
     public Root()
     {
-        Values = new();
+        Variables = new();
     }
+
+    public List<Variable> GetAllVariablesInScope() => Variables;
 }

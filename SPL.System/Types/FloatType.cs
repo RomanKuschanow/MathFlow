@@ -1,17 +1,16 @@
 ﻿using SPL.System.Instances;
 using SPL.System.Operators;
-using System.Numerics;
 
 namespace SPL.System.Types;
-public class NumType : IType
+public class FloatType : IType
 {
-    private static NumType _instance = new();
+    private static FloatType _instance = new();
 
-    public static NumType Instance => _instance;
+    public static FloatType Instance => _instance;
 
-    private NumType() { }
+    private FloatType() { }
 
-    public string Name => "Num";
+    public string Name => "double";
 
     public IEnumerable<IOperator> Operators => new List<IOperator>()
     {
@@ -21,7 +20,7 @@ public class NumType : IType
             operatorType: OperatorType.Negation,
             func: args =>
             {
-                var result = Instance.GetInstance(-((NumInstance)args[0]).Value);
+                var result = Instance.GetInstance(-((FloatInstance)args[0]).Value);
 
                 if (Instance.IsInstance(result))
                     return result;
@@ -34,7 +33,7 @@ public class NumType : IType
             operatorType: OperatorType.Equal,
             func: args =>
             {
-                var result = Instance.GetInstance(((NumInstance)args[0]).Value == ((NumInstance)args[1]).Value);
+                var result = Instance.GetInstance(((FloatInstance)args[0]).Value == ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
                     return result;
@@ -47,7 +46,7 @@ public class NumType : IType
             operatorType: OperatorType.NotEqual,
             func: args =>
             {
-                var result = Instance.GetInstance(((NumInstance)args[0]).Value != ((NumInstance)args[1]).Value);
+                var result = Instance.GetInstance(((FloatInstance)args[0]).Value != ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
                     return result;
@@ -60,7 +59,7 @@ public class NumType : IType
             operatorType: OperatorType.LessThan,
             func: args =>
             {
-                var result = Instance.GetInstance(((NumInstance)args[0]).Value < ((NumInstance)args[1]).Value);
+                var result = Instance.GetInstance(((FloatInstance)args[0]).Value < ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
                     return result;
@@ -73,7 +72,7 @@ public class NumType : IType
             operatorType: OperatorType.LessThanOrEqual,
             func: args =>
             {
-                var result = Instance.GetInstance(((NumInstance)args[0]).Value <= ((NumInstance)args[1]).Value);
+                var result = Instance.GetInstance(((FloatInstance)args[0]).Value <= ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
                     return result;
@@ -86,7 +85,7 @@ public class NumType : IType
             operatorType: OperatorType.GreaterThan,
             func: args =>
             {
-                var result = Instance.GetInstance(((NumInstance)args[0]).Value > ((NumInstance)args[1]).Value);
+                var result = Instance.GetInstance(((FloatInstance)args[0]).Value > ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
                     return result;
@@ -99,7 +98,7 @@ public class NumType : IType
             operatorType: OperatorType.GreaterThanOrEqual,
             func: args =>
             {
-                var result = Instance.GetInstance(((NumInstance)args[0]).Value >= ((NumInstance)args[1]).Value);
+                var result = Instance.GetInstance(((FloatInstance)args[0]).Value >= ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
                     return result;
@@ -112,7 +111,7 @@ public class NumType : IType
             operatorType: OperatorType.Addition,
             func: args =>
             {
-                var result = Instance.GetInstance(((NumInstance)args[0]).Value + ((NumInstance)args[1]).Value);
+                var result = Instance.GetInstance(((FloatInstance)args[0]).Value + ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
                     return result;
@@ -125,7 +124,7 @@ public class NumType : IType
             operatorType: OperatorType.Subtraction,
             func: args =>
             {
-                var result = Instance.GetInstance(((NumInstance)args[0]).Value - ((NumInstance)args[1]).Value);
+                var result = Instance.GetInstance(((FloatInstance)args[0]).Value - ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
                     return result;
@@ -138,7 +137,7 @@ public class NumType : IType
             operatorType: OperatorType.Multiplication,
             func: args =>
             {
-                var result = Instance.GetInstance(((NumInstance)args[0]).Value * ((NumInstance)args[1]).Value);
+                var result = Instance.GetInstance(((FloatInstance)args[0]).Value * ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
                     return result;
@@ -151,7 +150,7 @@ public class NumType : IType
             operatorType: OperatorType.Division,
             func: args =>
             {
-                var result = Instance.GetInstance(((NumInstance)args[0]).Value / ((NumInstance)args[1]).Value);
+                var result = Instance.GetInstance(((FloatInstance)args[0]).Value / ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
                     return result;
@@ -164,7 +163,7 @@ public class NumType : IType
             operatorType: OperatorType.Mod,
             func: args =>
             {
-                var result = Instance.GetInstance(((NumInstance)args[0]).Value % ((NumInstance)args[1]).Value);
+                var result = Instance.GetInstance(((FloatInstance)args[0]).Value % ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
                     return result;
@@ -177,8 +176,8 @@ public class NumType : IType
             operatorType: OperatorType.Exponent,
             func: args =>
             {
-                var a = ((NumInstance)args[0]).Value;
-                var b = ((NumInstance)args[1]).Value;
+                var a = ((FloatInstance)args[0]).Value;
+                var b = ((FloatInstance)args[1]).Value;
 
                 var result = Instance.GetInstance(Math.Pow(a, b));
 
@@ -193,7 +192,7 @@ public class NumType : IType
             operatorType: OperatorType.Factorial,
             func: args =>
             {
-                var a = ((NumInstance)args[0]).Value;
+                var a = ((FloatInstance)args[0]).Value;
 
                 var result = Instance.GetInstance(Gamma(a + 1));
 
@@ -242,7 +241,13 @@ public class NumType : IType
             }),
     };
 
-    public IInstance<IType> GetInstance(params object[] args) => (IInstance<IType>)new NumInstance((double)args[0]);
+    public IInstance<IType> GetInstance(params object[] args)
+    {
+        if (args.Length == 0)
+            return (IInstance<IType>)new FloatInstance(0);
 
-    public bool IsInstance(IInstance<IType> instance) => instance is IInstance<NumType>;
+        return (IInstance<IType>)new FloatInstance((double)args[0]);
+    }
+
+    public bool IsInstance(IInstance<IType> instance) => instance is IInstance<FloatType>;
 }

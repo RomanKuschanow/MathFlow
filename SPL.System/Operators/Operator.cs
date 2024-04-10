@@ -14,10 +14,10 @@ public class Operator : IOperator
 
     public Operator(List<IType> operandTypes, IType resultType, OperatorType operatorType, Func<List<IInstance<IType>>, IInstance<IType>> func)
     {
-        Operands = operandTypes;
-        ResultType = resultType;
+        Operands = operandTypes ?? throw new ArgumentNullException(nameof(operandTypes));
+        ResultType = resultType ?? throw new ArgumentNullException(nameof(resultType));
         OperatorType = operatorType;
-        _calculate = func;
+        _calculate = func ?? throw new ArgumentNullException(nameof(func));
     }
 
     public IInstance<IType> Calculate(List<IInstance<IType>> args) => _calculate(args);

@@ -4,18 +4,18 @@ using SPL.System.Types;
 namespace SPL.System.Statements;
 public class ElsePart : IStatementList
 {
-    private readonly Dictionary<string, IInstance<IType>> _values;
-
     public LinkedList<IStatement> Statements { get; init; }
 
     public IScope Parent { get; init; }
 
-    public Dictionary<string, IInstance<IType>> Values => _values.Concat(Parent.Values).ToDictionary(k => k.Key, v => v.Value);
+    public List<Variable> Variables { get; init; }
 
     public ElsePart(LinkedList<IStatement> statements, IScope parentScope)
     {
-        Statements = statements;
-        Parent = parentScope;
-        _values = new();
+        Statements = statements ?? throw new ArgumentNullException(nameof(statements));
+        Parent = parentScope ?? throw new ArgumentNullException(nameof(parentScope));
+        Variables = new();
     }
+
+    public List<Variable> GetAllVariablesInScope() => Variables.Concat(Parent.GetAllVariablesInScope()).ToList();
 }
