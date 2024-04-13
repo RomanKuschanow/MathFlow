@@ -11,4 +11,6 @@ public class BoolInstance : IInstance<BoolType>
     {
         Value = value;
     }
+
+    public override string ToString() => Value.ToString();
 }

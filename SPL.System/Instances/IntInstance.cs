@@ -11,4 +11,6 @@ public class IntInstance : IInstance<IntType>
     {
         Value = value;
     }
+
+    public override string ToString() => Value.ToString();
 }

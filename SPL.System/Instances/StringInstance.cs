@@ -11,4 +11,6 @@ public class StringInstance : IInstance<StringType>
     {
         Value = value;
     }
+
+    public override string ToString() => Value.ToString();
 }

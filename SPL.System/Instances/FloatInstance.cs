@@ -11,4 +11,6 @@ public class FloatInstance : IInstance<FloatType>
     {
         Value = value;
     }
+
+    public override string ToString() => Value.ToString();
 }
