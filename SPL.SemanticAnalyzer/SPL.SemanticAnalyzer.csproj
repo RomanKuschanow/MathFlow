@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SPL.System\SPL.System.csproj" />
+    <ProjectReference Include="..\SyntaxAnalyzer\SyntaxAnalyzer.csproj" />
+  </ItemGroup>
+
 </Project>

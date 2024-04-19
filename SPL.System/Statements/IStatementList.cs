@@ -1,5 +1,7 @@
-﻿namespace SPL.System.Statements;
+﻿using System.Collections.Immutable;
+
+namespace SPL.System.Statements;
 public interface IStatementList : IScope
 {
-    LinkedList<IStatement> Statements { get; }
+    ImmutableList<IStatement> Statements { get; }
 }

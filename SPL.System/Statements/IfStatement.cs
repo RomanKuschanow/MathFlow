@@ -1,6 +1,7 @@
 ﻿using SPL.System.Instances;
 using SPL.System.Statements.Expressions;
 using SPL.System.Types;
+using System.Collections.Immutable;
 
 namespace SPL.System.Statements;
 public class IfStatement : IStatement, IStatementList
@@ -8,8 +9,9 @@ public class IfStatement : IStatement, IStatementList
     private readonly IExpression _condition;
     private readonly Action<LinkedList<IStatement>> _getStatements;
     private readonly ElsePart _else;
+    private LinkedList<IStatement> _statements;
 
-    public LinkedList<IStatement> Statements { get; init; }
+    public ImmutableList<IStatement> Statements => ImmutableList.CreateRange(_statements);
 
     public IScope Parent { get; init; }
 

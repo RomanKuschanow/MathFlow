@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lexer\Lexer.csproj" />
-    <ProjectReference Include="..\SPL.SemanticAnalyzer\SPL.SemanticAnalyzer.csproj" />
     <ProjectReference Include="..\SyntaxAnalyzer\SyntaxAnalyzer.csproj" />
   </ItemGroup>
 

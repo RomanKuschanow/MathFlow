@@ -1,10 +1,13 @@
 ﻿using SPL.System.Instances;
 using SPL.System.Types;
+using System.Collections.Immutable;
 
 namespace SPL.System.Statements;
 public class ElsePart : IStatementList
 {
-    public LinkedList<IStatement> Statements { get; init; }
+    private LinkedList<IStatement> _statements;
+
+    public ImmutableList<IStatement> Statements => ImmutableList.CreateRange(_statements);
 
     public IScope Parent { get; init; }
 
@@ -12,7 +15,7 @@ public class ElsePart : IStatementList
 
     public ElsePart(LinkedList<IStatement> statements, IScope parentScope)
     {
-        Statements = statements ?? throw new ArgumentNullException(nameof(statements));
+        _statements = statements ?? throw new ArgumentNullException(nameof(statements));
         Parent = parentScope ?? throw new ArgumentNullException(nameof(parentScope));
         Variables = new();
     }
