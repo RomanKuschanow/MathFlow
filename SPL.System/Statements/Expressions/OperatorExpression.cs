@@ -6,13 +6,20 @@ namespace SPL.System.Statements.Expressions;
 public class OperatorExpression : IExpression
 {
     private readonly List<IExpression> _operands;
-    private readonly IOperator _operator;
+    private readonly OperatorType _operatorType;
+    private readonly Func<List<IType>, OperatorType, IOperator> _getOperator;
 
-    public OperatorExpression(List<IExpression> operands, IOperator @operator)
+    public OperatorExpression(List<IExpression> operands, OperatorType operatorType, Func<List<IType>, OperatorType, IOperator> getOperator)
     {
         _operands = operands ?? throw new ArgumentNullException(nameof(operands));
-        _operator = @operator ?? throw new ArgumentNullException(nameof(@operator));
+        _operatorType = operatorType;
+        _getOperator = getOperator ?? throw new ArgumentNullException(nameof(getOperator));
     }
 
-    public IInstance<IType> GetValue() => _operator.Calculate(_operands.Select(o => o.GetValue()).ToList());
+    public IInstance<IType> GetValue()
+    {
+        var operands = _operands.Select(o => o.GetValue()).ToList();
+
+        return _getOperator(operands.Select(o => o.Type).ToList(), _operatorType).Calculate(operands);
+    }
 }
