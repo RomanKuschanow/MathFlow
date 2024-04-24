@@ -2,6 +2,7 @@
 using SPL.System.Operators;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,9 @@ public class IntType : IType
 
     private IntType() { }
 
-    public string Name => "double";
+    public string Name => "Int";
+
+    public ImmutableList<string> Aliases => ImmutableList.CreateRange(new[] { "Int", "int", "Integer", "integer" });
 
     public IEnumerable<IOperator> Operators => new List<IOperator>()
     {

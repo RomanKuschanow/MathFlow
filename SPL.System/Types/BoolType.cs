@@ -1,5 +1,6 @@
 ﻿using SPL.System.Instances;
 using SPL.System.Operators;
+using System.Collections.Immutable;
 
 namespace SPL.System.Types;
 public class BoolType : IType
@@ -11,6 +12,8 @@ public class BoolType : IType
     private BoolType() { }
 
     public string Name => "Bool";
+
+    public ImmutableList<string> Aliases => ImmutableList.CreateRange(new[] { "Bool", "bool", "Boolean", "boolean" });
 
     public IEnumerable<IOperator> Operators => new List<IOperator>()
     {
@@ -80,6 +83,7 @@ public class BoolType : IType
                     throw new InvalidDataException();
             }),
     };
+
 
     public IInstance<IType> GetInstance(params object[] args)
     {

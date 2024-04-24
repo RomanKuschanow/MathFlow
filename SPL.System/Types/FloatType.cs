@@ -1,5 +1,6 @@
 ﻿using SPL.System.Instances;
 using SPL.System.Operators;
+using System.Collections.Immutable;
 
 namespace SPL.System.Types;
 public class FloatType : IType
@@ -10,7 +11,9 @@ public class FloatType : IType
 
     private FloatType() { }
 
-    public string Name => "double";
+    public string Name => "Float";
+
+    public ImmutableList<string> Aliases => ImmutableList.CreateRange(new[] { "Float", "float" });
 
     public IEnumerable<IOperator> Operators => new List<IOperator>()
     {

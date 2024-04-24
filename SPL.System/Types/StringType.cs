@@ -1,5 +1,6 @@
 ﻿using SPL.System.Instances;
 using SPL.System.Operators;
+using System.Collections.Immutable;
 
 namespace SPL.System.Types;
 public class StringType : IType
@@ -11,6 +12,8 @@ public class StringType : IType
     private StringType() { }
 
     public string Name => "String";
+
+    public ImmutableList<string> Aliases => ImmutableList.CreateRange(new[] { "String", "string", "str" });
 
     public IEnumerable<IOperator> Operators => new List<IOperator>()
     {

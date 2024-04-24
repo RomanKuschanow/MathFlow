@@ -1,6 +1,8 @@
 ﻿#nullable disable
 using SPL;
+using SPL.System.Operators;
 using SPL.System.Statements;
+using SPL.System.Types;
 
 namespace SPL.System;
 public class Program
@@ -12,9 +14,14 @@ public class Program
 
     private Stack<IStatement> _statements;
 
-    public Program(Root root)
+    public TypeManager TypeManager { get; init; }
+    public OperatorsManager OperatorsManager { get; init; }
+
+    public Program(Root root, TypeManager typeManager, OperatorsManager operatorsManager)
     {
         _root = root ?? throw new ArgumentNullException(nameof(root));
+        TypeManager = typeManager ?? throw new ArgumentNullException(nameof(typeManager));
+        OperatorsManager = operatorsManager ?? throw new ArgumentNullException(nameof(operatorsManager));
     }
 
     public async Task Execute(List<Action<string>> outs, Func<string, Task<string>> @in)
