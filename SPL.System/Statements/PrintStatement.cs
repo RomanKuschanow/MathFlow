@@ -5,13 +5,13 @@ namespace SPL.System.Statements;
 public class PrintStatement : IStatement
 {
     private readonly Action<string> _print;
-    private readonly IExpression _value;
+    private readonly List<IExpression> _values;
 
-    public PrintStatement(Action<string> print, IExpression value)
+    public PrintStatement(Action<string> print, List<IExpression> values)
     {
         _print = print ?? throw new ArgumentNullException(nameof(print));
-        _value = value ?? throw new ArgumentNullException(nameof(value));
+        _values = values ?? throw new ArgumentNullException(nameof(values));
     }
 
-    public void Execute() => _print(_value.GetValue().ToString());
+    public void Execute() => _print(string.Join(" ", _values.Select(v => v.GetValue().ToString())));
 }

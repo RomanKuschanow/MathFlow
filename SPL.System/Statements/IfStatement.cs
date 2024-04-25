@@ -19,7 +19,7 @@ public class IfStatement : IStatement, IStatementList
 
     public IfStatement(LinkedList<IStatement> statements, IScope parentScope, IExpression condition, Action<LinkedList<IStatement>> getStatements, ElsePart elsePart = null!)
     {
-        Statements = statements ?? throw new ArgumentNullException(nameof(statements));
+        _statements = statements ?? throw new ArgumentNullException(nameof(statements));
         Parent = parentScope ?? throw new ArgumentNullException(nameof(parentScope));
         Variables = new();
         _condition = condition ?? throw new ArgumentNullException(nameof(condition));

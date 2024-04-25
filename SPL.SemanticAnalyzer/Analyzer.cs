@@ -32,7 +32,7 @@ public partial class Analyzer
 
         LinkedList<IStatement> rootStatements = new();
         Root root = new(rootStatements);
-        var rawStatements = GetRawStatements(syntaxTree);
+        var rawStatements = GetRawNonterminalList(syntaxTree);
 
         Program program = new(root, typeManager, operatorsManager);
 
@@ -41,23 +41,18 @@ public partial class Analyzer
         return program;
     }
 
-    private List<Nonterminal> GetRawStatements(Nonterminal statementList)
+    private List<Nonterminal> GetRawNonterminalList(Nonterminal list)
     {
-        if (statementList is null)
+        if (list is null)
         {
-            throw new ArgumentNullException(nameof(statementList));
-        }
-
-        if (statementList.SymbolName != "StatementList")
-        {
-            throw new InvalidDataException(nameof(statementList));
+            throw new ArgumentNullException(nameof(list));
         }
 
         List<Nonterminal> result = new();
 
-        var currentItem = statementList;
+        var currentItem = list;
 
-        while (currentItem.SymbolName == "StatementList")
+        while (currentItem != result.Last())
         {
             result.Add(currentItem.Tokens.Last() as Nonterminal);
             currentItem = currentItem.Tokens[0] as Nonterminal;
@@ -69,7 +64,7 @@ public partial class Analyzer
     private void ProcessScopes(Program program, IStatementList statementList, LinkedList<IStatement> statements, List<Nonterminal> rawStatements)
     {
         var statementsAnalyzers = GetType().GetMethods()
-            .Where(m => m.Name.StartsWith("Get") && m.Name != "GetRawStatements")
+            .Where(m => m.Name.StartsWith("Get"))
             .ToDictionary<MethodInfo, string, Func<object, object[], object>>(k => k.Name[3..], v => v.Invoke);
 
         foreach (var rawStatement in rawStatements)

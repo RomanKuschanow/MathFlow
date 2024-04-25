@@ -6,18 +6,18 @@ namespace SPL.System.Statements.Expressions;
 public class InputExpression : IExpression
 {
     private readonly Func<string, Task<string>> _input;
-    private readonly IExpression _value;
+    private readonly List<IExpression> _values;
 
-    public InputExpression(Func<string, Task<string>> input, IExpression value = null!)
+    public InputExpression(Func<string, Task<string>> input, List<IExpression> values = null!)
     {
         _input = input ?? throw new ArgumentNullException(nameof(input));
-        _value = value ?? new InstanceExpression(StringType.Instance.GetInstance());
+        _values = values ?? new List<IExpression>() { new InstanceExpression(StringType.Instance.GetInstance()) };
     }
 
 
     public IInstance<IType> GetValue()
     {
-        string result = _input(_value.GetValue().ToString()).GetAwaiter().GetResult();
+        string result = _input(string.Join(" ", _values.Select(v => v.GetValue().ToString()))).GetAwaiter().GetResult();
 
         return (IInstance<IType>)new StringInstance(result);
     }

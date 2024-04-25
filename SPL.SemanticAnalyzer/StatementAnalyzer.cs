@@ -56,16 +56,76 @@ public partial class Analyzer
 
     private PrintStatement GetPrintStatement(Nonterminal printStatement, Program program, IStatementList statementList)
     {
-        throw new NotImplementedException();
+        if (printStatement.SymbolName != "PrintStatement")
+        {
+            throw new InvalidDataException(nameof(printStatement));
+        }
+
+        var rawArgs = GetRawNonterminalList(printStatement.Tokens[2] as Nonterminal);
+
+        var args = rawArgs.Select(a => GetExpression(a, program, statementList)).ToList();
+
+        return new(program.ConsoleOut, args);
     }
 
     private IfStatement GetIfStatement(Nonterminal ifStatement, Program program, IStatementList statementList)
     {
-        throw new NotImplementedException();
+        if (ifStatement.SymbolName != "IfStatement")
+        {
+            throw new InvalidDataException(nameof(ifStatement));
+        }
+
+        var condition = GetExpression(ifStatement.Tokens[2] as Nonterminal, program, statementList);
+        var rawBlock = GetBlock(ifStatement.Tokens[4] as Nonterminal, program, statementList);
+        LinkedList<IStatement> block = new();
+        ElsePart elsePart = null;
+
+        if ((ifStatement.Tokens[5] as Nonterminal).Tokens.Length > 0)
+        {
+            var rawElseBlock = GetBlock((ifStatement.Tokens[5] as Nonterminal).Tokens[1] as Nonterminal, program, statementList);
+            LinkedList<IStatement> elseBlock = new();
+            elsePart = new(elseBlock, statementList);
+
+            ProcessScopes(program, elsePart, elseBlock, rawElseBlock);
+        }
+
+        IfStatement result = new(block, statementList, condition, program.PushToStack, elsePart);
+        ProcessScopes(program, result, block, rawBlock);
+
+        return result;
     }
 
     private WhileStatement GetWhileStatement(Nonterminal whileStatement, Program program, IStatementList statementList)
     {
-        throw new NotImplementedException();
+        if (whileStatement.SymbolName != "WhileStatement")
+        {
+            throw new InvalidDataException(nameof(whileStatement));
+        }
+
+        var condition = GetExpression(whileStatement.Tokens[2] as Nonterminal, program, statementList);
+        var rawBlock = GetBlock(whileStatement.Tokens[4] as Nonterminal, program, statementList);
+        LinkedList<IStatement> block = new();
+
+        WhileStatement result = new(block, statementList, condition, program.PushToStack);
+        ProcessScopes(program, result, block, rawBlock);
+
+        return result;
+    }
+
+    private List<Nonterminal> GetBlock(Nonterminal block, Program program, IStatementList statementList)
+    {
+        if (block.SymbolName != "Block")
+        {
+            throw new InvalidDataException(nameof(block));
+        }
+
+        if (block.Tokens.Length > 1)
+        {
+            return GetRawNonterminalList(block.Tokens[1] as Nonterminal);
+        }
+        else
+        {
+            return new() { block.Tokens[0] as Nonterminal };
+        }
     }
 }
