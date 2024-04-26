@@ -38,7 +38,7 @@ public class WhileStatement : IStatement, IStatementList
         if (((BoolInstance)condition).Value)
         {
             _getStatements(new LinkedList<IStatement>(new IStatement[] { this }));
-            _getStatements(Statements);
+            _getStatements(_statements);
             return;
         }
     }

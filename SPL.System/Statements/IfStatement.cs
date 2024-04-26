@@ -38,12 +38,12 @@ public class IfStatement : IStatement, IStatementList
 
         if (((BoolInstance)condition).Value)
         {
-            _getStatements(Statements);
+            _getStatements(_statements);
             return;
         }
         else
         {
-            _getStatements(_else.Statements);
+            _getStatements(new LinkedList<IStatement>(_else.Statements));
             return;
         }
     }

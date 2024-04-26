@@ -5,7 +5,6 @@ using SPL.System.Statements;
 using SPL.System.Types;
 using System.Reflection;
 using SyntaxAnalyzer.Tokens;
-using System.Linq;
 
 namespace SPL.SemanticAnalyzer;
 public partial class Analyzer

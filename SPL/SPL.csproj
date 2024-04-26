@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lexer\Lexer.csproj" />
+    <ProjectReference Include="..\SPL.SemanticAnalyzer\SPL.SemanticAnalyzer.csproj" />
+    <ProjectReference Include="..\SPL.System\SPL.System.csproj" />
+    <ProjectReference Include="..\SyntaxAnalyzer\SyntaxAnalyzer.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Lexer\Lexer.csproj" />
-    <ProjectReference Include="..\SyntaxAnalyzer\SyntaxAnalyzer.csproj" />
-  </ItemGroup>
-
 </Project>

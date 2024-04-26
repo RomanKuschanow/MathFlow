@@ -45,8 +45,11 @@ public class Program
 
         PushToStack(_root.Statements);
 
-        while (_statements.Count > 0)
-            _statements.Pop().Execute();
+        await Task.Run(() =>
+        {
+            while (_statements.Count > 0)
+                _statements.Pop().Execute();
+        });
     }
 
     public void ConsoleOut(string str) => _out(str);

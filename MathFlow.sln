@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MathFlow", "MathFlow", "{8C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathFlow.SemanticAnalyzer", "MathFlow.SemanticAnalyzer\MathFlow.SemanticAnalyzer.csproj", "{9F052745-79A1-4B44-96D1-3BEAC37DDC02}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPL", "SPL\SPL.csproj", "{F7E7B1C5-8225-44C3-A05F-F01FDC59F650}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{9F052745-79A1-4B44-96D1-3BEAC37DDC02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F052745-79A1-4B44-96D1-3BEAC37DDC02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F052745-79A1-4B44-96D1-3BEAC37DDC02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7E7B1C5-8225-44C3-A05F-F01FDC59F650}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7E7B1C5-8225-44C3-A05F-F01FDC59F650}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7E7B1C5-8225-44C3-A05F-F01FDC59F650}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7E7B1C5-8225-44C3-A05F-F01FDC59F650}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -88,6 +94,7 @@ Global
 		{41288117-803D-438D-A734-56B8A76165E1} = {0ED98EC1-8FBF-4256-AB90-66E59E7CDED7}
 		{8D31B9F2-25D3-422C-AD0C-7A564FDF87FD} = {D26B7691-9B74-4093-945F-85AAA21E74AF}
 		{9F052745-79A1-4B44-96D1-3BEAC37DDC02} = {8C68C750-32D0-492F-9B1E-9E401A41FC24}
+		{F7E7B1C5-8225-44C3-A05F-F01FDC59F650} = {D26B7691-9B74-4093-945F-85AAA21E74AF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A2553AB2-16F3-461E-A366-3FF3C3979B8C}
