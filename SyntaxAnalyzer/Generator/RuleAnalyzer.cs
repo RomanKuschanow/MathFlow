@@ -1,12 +1,7 @@
 ﻿using SyntaxAnalyzer.Generator.Actions;
 using SyntaxAnalyzer.Rules;
 using SyntaxAnalyzer.Rules.Symbols;
-using SyntaxAnalyzer.Tokens;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SyntaxAnalyzer.Generator;
 public class RuleAnalyzer
@@ -188,7 +183,7 @@ public class RuleAnalyzer
             .Where(p =>
             {
                 var a = new Point(p.Rule, p.Cursor + 1, p.Next);
-                return a.FollowingSymbol is RuleEndSymbol || a.FollowingSymbol is VoidSymbol;
+                return a.FollowingSymbol is RuleEndSymbol || a.FollowingSymbol is VoidSymbol || First(a.FollowingSymbol, grammar).SingleOrDefault(f => f is VoidSymbol) is not null;
             })
             .SelectMany(p => p.Next);
 
@@ -198,12 +193,12 @@ public class RuleAnalyzer
             .Where(p =>
             {
                 var a = new Point(p.Rule, p.Cursor + 1, p.Next);
-                return a.FollowingSymbol is TerminalSymbol || a.FollowingSymbol is NonterminalSymbol;
+                return (a.FollowingSymbol is TerminalSymbol || a.FollowingSymbol is NonterminalSymbol);
             })
             .SelectMany(p => First((new Point(p.Rule, p.Cursor + 1, p.Next)).FollowingSymbol, grammar)).Cast<ISymbol>()
             );
 
-        return result.Distinct();
+        return result.Where(r => r is not VoidSymbol).Distinct();
     }
 
     public IEnumerable<Point> GetClosure(Point kernel, Grammar grammar)
@@ -222,6 +217,11 @@ public class RuleAnalyzer
         {
             Point point = queue.Dequeue();
 
+            if (point.Rule.NonTerminal.Value == "Block")
+            {
+
+            }
+
             if (point.FollowingSymbol is not NonterminalSymbol)
             {
                 continue;
@@ -231,10 +231,6 @@ public class RuleAnalyzer
                 .Where(r => r.NonTerminal == (NonterminalSymbol)point.FollowingSymbol)
                 .Select(r => new Point(r, 0, new List<ISymbol>() { new RuleEndSymbol() })).ToList();
 
-            var next = Follow((NonterminalSymbol)point.FollowingSymbol, result.Concat(points), grammar);
-
-            points = points.Select(p => new Point(p.Rule, 0, next)).ToList();
-
             points.ToList().ForEach(p =>
             {
                 if (!result.Contains(p))
@@ -243,6 +239,15 @@ public class RuleAnalyzer
                     result.Add(p);
                 }
             });
+        }
+
+        var nonTerminals = result.Skip(1).Select(p => p.Rule.NonTerminal).Distinct();
+
+        var uniqueNext = nonTerminals.ToDictionary(k => k, v => Follow(v, result, grammar));
+
+        for ( int i = 1; i < result.Count(); i++)
+        {
+            result[i] = new Point(result[i].Rule, result[i].Cursor, uniqueNext[result[i].Rule.NonTerminal]);
         }
 
         return result.Distinct();

@@ -11,7 +11,7 @@ public record Terminal : IToken
 
     public Terminal(ISymbol symbol, string value)
     {
-        if (string.IsNullOrWhiteSpace(value))
+        if (string.IsNullOrWhiteSpace(value) && symbol is not VoidSymbol)
         {
             throw new ArgumentException($"'{nameof(value)}' cannot be null or whitespace.", nameof(value));
         }

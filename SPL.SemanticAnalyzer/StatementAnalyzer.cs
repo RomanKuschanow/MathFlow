@@ -46,7 +46,7 @@ public partial class Analyzer
 
         if (assignment.Tokens.Length == 3)
         {
-            return new Assignment(statementList.AssignVariable, varName, GetExpression(assignment, program, statementList));
+            return new Assignment(statementList.AssignVariable, varName, GetExpression(assignment.Tokens.Last() as Nonterminal, program, statementList));
         }
         else
         {
@@ -82,11 +82,14 @@ public partial class Analyzer
 
         if ((ifStatement.Tokens[5] as Nonterminal).Tokens.Length > 0)
         {
-            var rawElseBlock = GetBlock((ifStatement.Tokens[5] as Nonterminal).Tokens[1] as Nonterminal, program, statementList);
-            LinkedList<IStatement> elseBlock = new();
-            elsePart = new(elseBlock, statementList);
+            if ((ifStatement.Tokens[5] as Nonterminal).Tokens.Length > 1)
+            {
+                var rawElseBlock = GetBlock((ifStatement.Tokens[5] as Nonterminal).Tokens[1] as Nonterminal, program, statementList);
+                LinkedList<IStatement> elseBlock = new();
+                elsePart = new(elseBlock, statementList);
 
-            ProcessScopes(program, elsePart, elseBlock, rawElseBlock);
+                ProcessScopes(program, elsePart, elseBlock, rawElseBlock);
+            }
         }
 
         IfStatement result = new(block, statementList, condition, program.PushToStack, elsePart);
@@ -110,6 +113,24 @@ public partial class Analyzer
         ProcessScopes(program, result, block, rawBlock);
 
         return result;
+    }
+
+    private BreakStatement GetBreakStatement(Nonterminal breakStatement, Program program, IStatementList statementList)
+    {
+        if (breakStatement.SymbolName != "BreakStatement")
+        {
+            throw new InvalidDataException(nameof(breakStatement));
+        }
+
+        switch ((breakStatement.Tokens[0] as Terminal).Value)
+        {
+            case "break":
+                return new BreakStatement(program.BreakLoop, false);
+            case "continue":
+                return new BreakStatement(program.BreakLoop, true);
+            default:
+                throw new InvalidDataException();
+        }
     }
 
     private List<Nonterminal> GetBlock(Nonterminal block, Program program, IStatementList statementList)

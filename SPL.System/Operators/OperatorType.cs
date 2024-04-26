@@ -17,5 +17,6 @@ public enum OperatorType
     Exponent,
     Negation,
     Not,
-    Factorial
+    Factorial,
+    Cast
 }

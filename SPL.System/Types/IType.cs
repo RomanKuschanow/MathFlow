@@ -13,5 +13,7 @@ public interface IType
 
     IInstance<IType> GetInstance(params object[] args);
 
+    IInstance<IType> Cast(IInstance<IType> instance);
+
     bool IsInstance(IInstance<IType> instance);
 }

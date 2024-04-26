@@ -18,11 +18,11 @@ public partial class Analyzer
 
         List<IType> types = typeof(IType).Assembly.GetTypes()
             .Where(t => t.GetInterfaces().Contains(typeof(IType)))
-            .Select(t => t.GetProperty("Instance", BindingFlags.Static).GetValue(null) as IType)
+            .Select(t => t.GetProperty("Instance").GetValue(null) as IType)
             .ToList();
 
         List<IOperator> operators = types.Select(t => t.GetType())
-            .Select(t => t.GetProperty("Operators").GetValue(t.GetProperty("Instance", BindingFlags.Static).GetValue(null)) as IEnumerable<IOperator>)
+            .Select(t => t.GetProperty("Operators").GetValue(t.GetProperty("Instance").GetValue(null)) as IEnumerable<IOperator>)
             .SelectMany(ol => ol)
             .ToList();
 
@@ -51,18 +51,20 @@ public partial class Analyzer
 
         var currentItem = list;
 
-        while (currentItem != result.Last())
+        while (currentItem != result.LastOrDefault())
         {
             result.Add(currentItem.Tokens.Last() as Nonterminal);
             currentItem = currentItem.Tokens[0] as Nonterminal;
         }
+
+        result.Reverse();
 
         return result;
     }
 
     private void ProcessScopes(Program program, IStatementList statementList, LinkedList<IStatement> statements, List<Nonterminal> rawStatements)
     {
-        var statementsAnalyzers = GetType().GetMethods()
+        var statementsAnalyzers = GetType().GetMethods(BindingFlags.Instance | BindingFlags.NonPublic)
             .Where(m => m.Name.StartsWith("Get"))
             .ToDictionary<MethodInfo, string, Func<object, object[], object>>(k => k.Name[3..], v => v.Invoke);
 

@@ -21,7 +21,7 @@ public class Grammar
             .SelectMany(r => r)
             .Distinct()
             .Except(Nonterminals.Select(n => n.Value))
-            .Select(t => new TerminalSymbol(t)).ToImmutableArray();
+            .Select(t => string.IsNullOrWhiteSpace(t) ? new VoidSymbol() : new TerminalSymbol(t)).ToImmutableArray();
 
         foreach (var stringRule in stringRules)
         {

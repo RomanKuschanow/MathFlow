@@ -21,8 +21,7 @@ public class RegexLexemeDefinition : ILexemeDefinition
 
     public Lexeme? TryGetLexeme(string text)
     {
-        Match match;
-        match = Regex.Match(text);
+        Match match = Regex.Match(text);
 
         return match.Success ? new(Type, match.Value) : null;
     }

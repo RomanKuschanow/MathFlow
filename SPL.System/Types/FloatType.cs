@@ -36,9 +36,9 @@ public class FloatType : IType
             operatorType: OperatorType.Equal,
             func: args =>
             {
-                var result = Instance.GetInstance(((FloatInstance)args[0]).Value == ((FloatInstance)args[1]).Value);
+                var result = BoolType.Instance.GetInstance(((FloatInstance)args[0]).Value == ((FloatInstance)args[1]).Value);
 
-                if (Instance.IsInstance(result))
+                if (BoolType.Instance.IsInstance(result))
                     return result;
                 else
                     throw new InvalidDataException();
@@ -49,9 +49,9 @@ public class FloatType : IType
             operatorType: OperatorType.NotEqual,
             func: args =>
             {
-                var result = Instance.GetInstance(((FloatInstance)args[0]).Value != ((FloatInstance)args[1]).Value);
+                var result = BoolType.Instance.GetInstance(((FloatInstance)args[0]).Value != ((FloatInstance)args[1]).Value);
 
-                if (Instance.IsInstance(result))
+                if (BoolType.Instance.IsInstance(result))
                     return result;
                 else
                     throw new InvalidDataException();
@@ -62,9 +62,9 @@ public class FloatType : IType
             operatorType: OperatorType.LessThan,
             func: args =>
             {
-                var result = Instance.GetInstance(((FloatInstance)args[0]).Value < ((FloatInstance)args[1]).Value);
+                var result = BoolType.Instance.GetInstance(((FloatInstance)args[0]).Value < ((FloatInstance)args[1]).Value);
 
-                if (Instance.IsInstance(result))
+                if (BoolType.Instance.IsInstance(result))
                     return result;
                 else
                     throw new InvalidDataException();
@@ -75,9 +75,9 @@ public class FloatType : IType
             operatorType: OperatorType.LessThanOrEqual,
             func: args =>
             {
-                var result = Instance.GetInstance(((FloatInstance)args[0]).Value <= ((FloatInstance)args[1]).Value);
+                var result = BoolType.Instance.GetInstance(((FloatInstance)args[0]).Value <= ((FloatInstance)args[1]).Value);
 
-                if (Instance.IsInstance(result))
+                if (BoolType.Instance.IsInstance(result))
                     return result;
                 else
                     throw new InvalidDataException();
@@ -88,9 +88,9 @@ public class FloatType : IType
             operatorType: OperatorType.GreaterThan,
             func: args =>
             {
-                var result = Instance.GetInstance(((FloatInstance)args[0]).Value > ((FloatInstance)args[1]).Value);
+                var result = BoolType.Instance.GetInstance(((FloatInstance)args[0]).Value > ((FloatInstance)args[1]).Value);
 
-                if (Instance.IsInstance(result))
+                if (BoolType.Instance.IsInstance(result))
                     return result;
                 else
                     throw new InvalidDataException();
@@ -101,9 +101,9 @@ public class FloatType : IType
             operatorType: OperatorType.GreaterThanOrEqual,
             func: args =>
             {
-                var result = Instance.GetInstance(((FloatInstance)args[0]).Value >= ((FloatInstance)args[1]).Value);
+                var result = BoolType.Instance.GetInstance(((FloatInstance)args[0]).Value >= ((FloatInstance)args[1]).Value);
 
-                if (Instance.IsInstance(result))
+                if (BoolType.Instance.IsInstance(result))
                     return result;
                 else
                     throw new InvalidDataException();
@@ -247,10 +247,32 @@ public class FloatType : IType
     public IInstance<IType> GetInstance(params object[] args)
     {
         if (args.Length == 0)
-            return (IInstance<IType>)new FloatInstance(0);
+            return new FloatInstance(0);
 
-        return (IInstance<IType>)new FloatInstance((double)args[0]);
+        return new FloatInstance((double)args[0]);
     }
 
     public bool IsInstance(IInstance<IType> instance) => instance is IInstance<FloatType>;
+
+    public IInstance<IType> Cast(IInstance<IType> instance)
+    {
+        if (instance is null)
+        {
+            throw new ArgumentNullException(nameof(instance));
+        }
+
+        if (instance.Type is FloatType)
+            return instance;
+
+        if (instance.Type is BoolType)
+            return new FloatInstance(((BoolInstance)instance).Value ? 1 : 0);
+
+        if (instance.Type is IntType)
+            return new FloatInstance(Convert.ToDouble(((IntInstance)instance).Value));
+
+        if (instance.Type is StringType)
+            return new FloatInstance(double.Parse(((StringInstance)instance).Value));
+
+        throw new InvalidOperationException();
+    }
 }

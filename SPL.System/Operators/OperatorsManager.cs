@@ -19,5 +19,10 @@ public class OperatorsManager
         Operators = operators;
     }
 
-    public IOperator GetOperator(List<IType> args, OperatorType operatorType) => Operators.SingleOrDefault(o => o.Operands.SequenceEqual(args) && o.OperatorType == operatorType);
+    public IOperator GetOperator(List<IType> args, OperatorType operatorType)
+    {
+        var op = Operators.SingleOrDefault(o => o.Operands.SequenceEqual(args) && o.OperatorType == operatorType);
+
+        return op is not null ? op : throw new InvalidDataException();
+    }
 }

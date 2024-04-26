@@ -88,10 +88,32 @@ public class BoolType : IType
     public IInstance<IType> GetInstance(params object[] args)
     {
         if (args.Length == 0)
-            return (IInstance<IType>)new BoolInstance();
+            return new BoolInstance();
 
-        return (IInstance<IType>)new BoolInstance((bool)args[0]);
+        return new BoolInstance((bool)args[0]);
     }
 
     public bool IsInstance(IInstance<IType> instance) => instance is IInstance<BoolType>;
+
+    public IInstance<IType> Cast(IInstance<IType> instance)
+    {
+        if (instance is null)
+        {
+            throw new ArgumentNullException(nameof(instance));
+        }
+
+        if (instance.Type is BoolType)
+            return instance;
+
+        if (instance.Type is FloatType)
+            return new BoolInstance(((FloatInstance)instance).Value == 0);
+
+        if (instance.Type is IntType)
+            return new BoolInstance(((IntInstance)instance).Value == 0);
+
+        if (instance.Type is StringType)
+            return new BoolInstance(bool.Parse(((StringInstance)instance).Value));
+
+        throw new InvalidOperationException();
+    }
 }

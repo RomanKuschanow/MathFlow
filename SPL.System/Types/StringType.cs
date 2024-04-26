@@ -1,4 +1,5 @@
-﻿using SPL.System.Instances;
+﻿#nullable disable
+using SPL.System.Instances;
 using SPL.System.Operators;
 using System.Collections.Immutable;
 
@@ -36,9 +37,9 @@ public class StringType : IType
             operatorType: OperatorType.Equal,
             func: args =>
             {
-                var result = Instance.GetInstance(((StringInstance)args[0]).Value == ((StringInstance)args[1]).Value);
+                var result = BoolType.Instance.GetInstance(((StringInstance)args[0]).Value == ((StringInstance)args[1]).Value);
 
-                if (Instance.IsInstance(result))
+                if (BoolType.Instance.IsInstance(result))
                     return result;
                 else
                     throw new InvalidDataException();
@@ -49,9 +50,9 @@ public class StringType : IType
             operatorType: OperatorType.NotEqual,
             func: args =>
             {
-                var result = Instance.GetInstance(((StringInstance)args[0]).Value != ((StringInstance)args[1]).Value);
+                var result = BoolType.Instance.GetInstance(((StringInstance)args[0]).Value != ((StringInstance)args[1]).Value);
 
-                if (Instance.IsInstance(result))
+                if (BoolType.Instance.IsInstance(result))
                     return result;
                 else
                     throw new InvalidDataException();
@@ -80,10 +81,20 @@ public class StringType : IType
     public IInstance<IType> GetInstance(params object[] args)
     {
         if (args.Length == 0)
-            return (IInstance<IType>)new StringInstance(null!);
+            return new StringInstance("");
 
-        return (IInstance<IType>)new StringInstance((string)args[0]);
+        return new StringInstance((string)args[0]);
     }
 
     public bool IsInstance(IInstance<IType> instance) => instance is IInstance<StringType>;
+
+    public IInstance<IType> Cast(IInstance<IType> instance)
+    {
+        if (instance is null)
+        {
+            throw new ArgumentNullException(nameof(instance));
+        }
+
+        return new StringInstance(instance.ToString());
+    }
 }

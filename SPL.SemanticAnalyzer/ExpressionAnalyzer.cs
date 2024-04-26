@@ -162,16 +162,16 @@ public partial class Analyzer
 
     private IExpression GetExponent(Nonterminal exponent, Program program, IStatementList statementList)
     {
-        if (exponent.SymbolName != "Multiplicative")
+        if (exponent.SymbolName != "Exponent")
         {
             throw new InvalidDataException(nameof(exponent));
         }
 
-        var factor = GetExponent(exponent.Tokens.Last() as Nonterminal, program, statementList);
+        var factor = GetFactor(exponent.Tokens.First() as Nonterminal, program, statementList);
 
         if (exponent.Tokens.Length == 3)
         {
-            return new OperatorExpression(new List<IExpression>() { GetExponent(exponent.Tokens[0] as Nonterminal, program, statementList), factor }, OperatorType.Exponent, program.OperatorsManager.GetOperator);
+            return new OperatorExpression(new List<IExpression>() { GetExponent(exponent.Tokens[2] as Nonterminal, program, statementList), factor }, OperatorType.Exponent, program.OperatorsManager.GetOperator);
         }
         else
         {
@@ -194,12 +194,13 @@ public partial class Analyzer
         {
             return (factor.Tokens[0].Symbol as IHaveValue<string>).Value switch
             {
-                "value" => new InstanceExpression(GetValue(factor.Tokens[0] as Nonterminal)),
-                "id" => new VariableExpression((factor.Tokens[0] as IHaveValue<string>).Value, statementList.GetValue),
+                "Value" => new InstanceExpression(GetValue(factor.Tokens[0] as Nonterminal)),
+                "id" => new VariableExpression((factor.Tokens[0] as Terminal).Value, statementList.GetValue),
                 "Negation" => GetNegation(factor.Tokens[0] as Nonterminal, program, statementList),
                 "Not" => GetNot(factor.Tokens[0] as Nonterminal, program, statementList),
                 "Factorial" => GetFactorial(factor.Tokens[0] as Nonterminal, program, statementList),
                 "Input" => GetInput(factor.Tokens[0] as Nonterminal, program, statementList),
+                "Cast" => GetCast(factor.Tokens[0] as Nonterminal, program, statementList),
                 _ => throw new()
             };
         }
@@ -209,10 +210,10 @@ public partial class Analyzer
     {
         return (value.Tokens[0].Symbol as IHaveValue<string>).Value switch
         {
-            "int" => IntType.Instance.GetInstance(long.Parse((value.Tokens[0] as IHaveValue<string>).Value)),
-            "float" => FloatType.Instance.GetInstance(decimal.Parse((value.Tokens[0] as IHaveValue<string>).Value)),
-            "bool" => BoolType.Instance.GetInstance(bool.Parse((value.Tokens[0] as IHaveValue<string>).Value)),
-            "string" => StringType.Instance.GetInstance((value.Tokens[0] as IHaveValue<string>).Value),
+            "int" => IntType.Instance.GetInstance(long.Parse((value.Tokens[0] as Terminal).Value)),
+            "float" => FloatType.Instance.GetInstance(decimal.Parse((value.Tokens[0] as Terminal).Value)),
+            "bool" => BoolType.Instance.GetInstance(bool.Parse((value.Tokens[0] as Terminal).Value)),
+            "string" => StringType.Instance.GetInstance((value.Tokens[0] as Terminal).Value[1..^1]),
             _ => throw new()
         };
     }
@@ -255,5 +256,15 @@ public partial class Analyzer
         }
 
         return new InputExpression(program.ConsoleIn, input.Tokens.Length == 3 ? null : GetRawNonterminalList(input.Tokens[2] as Nonterminal).Select(n => GetExpression(n, program, statementList)).ToList());
+    }
+
+    private IExpression GetCast(Nonterminal cast, Program program, IStatementList statementList)
+    {
+        if (cast.SymbolName != "Cast")
+        {
+            throw new InvalidDataException(nameof(cast));
+        }
+
+        return new CastExpression(program.TypeManager.GetTypeByAlias((cast.Tokens[1] as Terminal).Value), GetFactor(cast.Tokens.Last() as Nonterminal, program, statementList));
     }
 }

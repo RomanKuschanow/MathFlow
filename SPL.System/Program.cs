@@ -65,4 +65,22 @@ public class Program
             _statements.Push(statement);
         }
     }
+
+    public void BreakLoop(bool _continue)
+    {
+        if (_statements.SingleOrDefault(s => s is WhileStatement) is null)
+        {
+            throw new InvalidOperationException();
+        }    
+
+        while (_statements.Peek() is not WhileStatement)
+        {
+            _statements.Pop();
+        }
+
+        if (!_continue)
+        {
+            _statements.Pop();
+        }
+    }
 }

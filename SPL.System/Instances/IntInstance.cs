@@ -5,7 +5,7 @@ public class IntInstance : IInstance<IntType>
 {
     public IntType Type => IntType.Instance;
 
-    internal double Value { get; set; }
+    internal long Value { get; set; }
 
     public IntInstance(long value)
     {

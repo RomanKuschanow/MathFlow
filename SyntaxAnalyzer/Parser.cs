@@ -2,6 +2,7 @@
 using SyntaxAnalyzer.Generator;
 using SyntaxAnalyzer.Generator.Actions;
 using SyntaxAnalyzer.Rules;
+using SyntaxAnalyzer.Rules.Symbols;
 using SyntaxAnalyzer.Tokens;
 
 namespace SyntaxAnalyzer;
@@ -22,7 +23,13 @@ public class Parser
         {
             var s = input.Peek();
 
-            IAction action = Table.Actions.Single(a => a.InitState == stack.GetState() && a.Symbol == input.Peek().Symbol);
+            IAction action = Table.Actions.SingleOrDefault(a => a.InitState == stack.GetState() && a.Symbol == input.Peek().Symbol);
+
+            if (action is null)
+            {
+                input.Push(new Terminal(new VoidSymbol(), ""));
+                action = Table.Actions.Single(a => a.InitState == stack.GetState() && a.Symbol is VoidSymbol);
+            }
 
             if (action.Type == ActionType.Shift)
             {

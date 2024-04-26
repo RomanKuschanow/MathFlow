@@ -23,7 +23,10 @@ public class Variable
     public void SetValue(IInstance<IType> instance)
     {
         if (instance.Type == Type)
+        {
             Instance = instance;
+            return;
+        }
 
         throw new InvalidDataException($"cannot assign type '{instance.Type}' to '{Type}'");
     }
