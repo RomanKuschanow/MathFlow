@@ -10,35 +10,31 @@ internal class Program
 {
     static async Task Main(string[] args)
     {
-        var code =
-            """
-            int i = 0;
-            while (i < 10)
-            {
-                i = i + 1;
-                if (i > 5)
-                {
-                    continue;
-                }
-                print(i);
-            }
-            print("a " + (string)i);
-            """;
+        string code = "";
 
-        Stopwatch stopwatch = new Stopwatch();
+        try
+        {
+            if (args[0] == "-f")
+            {
+                code = File.ReadAllText(args[1]);
+            }
+            else
+            {
+                code = "p" + string.Join(" ", args) + ";";
+            }
+        }
+        catch
+        {
+            Console.WriteLine("Invalid arguments");
+            return;
+        }
 
         SPLProgram program = new(code, new() { Console.WriteLine }, Input);
 
         SPLProgram.UpdateParser();
 
-        stopwatch.Start();
         await program.Build();
-        stopwatch.Stop();
-        Console.WriteLine("Build time " + stopwatch.ElapsedMilliseconds);
-        stopwatch.Restart();
         await program.Execute();
-        stopwatch.Stop();
-        Console.WriteLine("Run time " + stopwatch.ElapsedMilliseconds);
     }
 
     private static async Task<string> Input(string str)

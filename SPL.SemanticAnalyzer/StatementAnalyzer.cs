@@ -1,6 +1,7 @@
 ﻿#nullable disable
 using SPL.System;
 using SPL.System.Statements;
+using SPL.System.Statements.Expressions;
 using SPL.System.Types;
 using SyntaxAnalyzer.Tokens;
 using System.Xml.Linq;
@@ -59,6 +60,11 @@ public partial class Analyzer
         if (printStatement.SymbolName != "PrintStatement")
         {
             throw new InvalidDataException(nameof(printStatement));
+        }
+
+        if (printStatement.Tokens.Length == 2)
+        {
+            return new(program.ConsoleOut, new List<IExpression>() { GetExpression(printStatement.Tokens[1] as Nonterminal, program, statementList) });
         }
 
         var rawArgs = GetRawNonterminalList(printStatement.Tokens[2] as Nonterminal);

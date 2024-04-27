@@ -179,10 +179,10 @@ public class IntType : IType
             operatorType: OperatorType.Exponent,
             func: args =>
             {
-                var a = ((IntInstance)args[0]).Value;
-                var b = ((IntInstance)args[1]).Value;
+                var a = ((IntInstance)args[1]).Value;
+                var b = ((IntInstance)args[0]).Value;
 
-                var result = Instance.GetInstance(Math.Pow(a, b));
+                var result = Instance.GetInstance(Convert.ToInt64(Math.Pow(a, b)));
 
                 if (Instance.IsInstance(result))
                     return result;

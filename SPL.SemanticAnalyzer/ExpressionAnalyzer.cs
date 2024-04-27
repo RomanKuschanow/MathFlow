@@ -211,7 +211,7 @@ public partial class Analyzer
         return (value.Tokens[0].Symbol as IHaveValue<string>).Value switch
         {
             "int" => IntType.Instance.GetInstance(long.Parse((value.Tokens[0] as Terminal).Value)),
-            "float" => FloatType.Instance.GetInstance(decimal.Parse((value.Tokens[0] as Terminal).Value)),
+            "float" => FloatType.Instance.GetInstance(double.Parse((value.Tokens[0] as Terminal).Value.TrimEnd('f'))),
             "bool" => BoolType.Instance.GetInstance(bool.Parse((value.Tokens[0] as Terminal).Value)),
             "string" => StringType.Instance.GetInstance((value.Tokens[0] as Terminal).Value[1..^1]),
             _ => throw new()

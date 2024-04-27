@@ -21,7 +21,7 @@ public class OperatorsManager
 
     public IOperator GetOperator(List<IType> args, OperatorType operatorType)
     {
-        var op = Operators.SingleOrDefault(o => o.Operands.SequenceEqual(args) && o.OperatorType == operatorType);
+        var op = Operators.SingleOrDefault(o => o.Operands.SingleOrDefault(_o => _o.SequenceEqual(args)) is not null && o.OperatorType == operatorType);
 
         return op is not null ? op : throw new InvalidDataException();
     }

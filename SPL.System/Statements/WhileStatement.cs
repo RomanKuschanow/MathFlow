@@ -32,6 +32,8 @@ public class WhileStatement : IStatement, IStatementList
     {
         var condition = _condition.GetValue();
 
+        Variables.Clear();
+
         if (condition.Type is not BoolType)
             throw new InvalidDataException($"condition must be a type of 'Bool', but found '{condition.Type.Name}'");
 

@@ -31,7 +31,7 @@ public class LexemeAnalyzer
                     yield return foundLexeme.lexeme;
                 }
 
-                startIndex += foundLexeme.lexeme.Value.Length;
+                startIndex += foundLexeme.lexeme.Length;
             }
             else
             {

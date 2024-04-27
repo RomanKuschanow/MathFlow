@@ -31,11 +31,12 @@ public class FloatType : IType
                     throw new InvalidDataException();
             }),
         new Operator(
-            operandTypes: new List<IType>() { Instance, Instance },
+            operandTypes: new List<List<IType>>() { new() { Instance, Instance }, new() { IntType.Instance, Instance }, new() { Instance, IntType.Instance }, },
             resultType: Instance,
             operatorType: OperatorType.Equal,
             func: args =>
             {
+                args = ConvertToFloat(args);
                 var result = BoolType.Instance.GetInstance(((FloatInstance)args[0]).Value == ((FloatInstance)args[1]).Value);
 
                 if (BoolType.Instance.IsInstance(result))
@@ -44,11 +45,13 @@ public class FloatType : IType
                     throw new InvalidDataException();
             }),
         new Operator(
-            operandTypes: new List<IType>() { Instance, Instance },
+            operandTypes: new List<List<IType>>() { new() { Instance, Instance }, new() { IntType.Instance, Instance }, new() { Instance, IntType.Instance }, },
             resultType: Instance,
             operatorType: OperatorType.NotEqual,
             func: args =>
             {
+                args = ConvertToFloat(args);
+
                 var result = BoolType.Instance.GetInstance(((FloatInstance)args[0]).Value != ((FloatInstance)args[1]).Value);
 
                 if (BoolType.Instance.IsInstance(result))
@@ -57,11 +60,13 @@ public class FloatType : IType
                     throw new InvalidDataException();
             }),
         new Operator(
-            operandTypes: new List<IType>() { Instance, Instance },
+            operandTypes: new List<List<IType>>() { new() { Instance, Instance }, new() { IntType.Instance, Instance }, new() { Instance, IntType.Instance }, },
             resultType: Instance,
             operatorType: OperatorType.LessThan,
             func: args =>
             {
+                args = ConvertToFloat(args);
+
                 var result = BoolType.Instance.GetInstance(((FloatInstance)args[0]).Value < ((FloatInstance)args[1]).Value);
 
                 if (BoolType.Instance.IsInstance(result))
@@ -70,11 +75,13 @@ public class FloatType : IType
                     throw new InvalidDataException();
             }),
         new Operator(
-            operandTypes: new List<IType>() { Instance, Instance },
+            operandTypes: new List<List<IType>>() { new() { Instance, Instance }, new() { IntType.Instance, Instance }, new() { Instance, IntType.Instance }, },
             resultType: Instance,
             operatorType: OperatorType.LessThanOrEqual,
             func: args =>
             {
+                args = ConvertToFloat(args);
+
                 var result = BoolType.Instance.GetInstance(((FloatInstance)args[0]).Value <= ((FloatInstance)args[1]).Value);
 
                 if (BoolType.Instance.IsInstance(result))
@@ -83,11 +90,13 @@ public class FloatType : IType
                     throw new InvalidDataException();
             }),
         new Operator(
-            operandTypes: new List<IType>() { Instance, Instance },
+            operandTypes: new List<List<IType>>() { new() { Instance, Instance }, new() { IntType.Instance, Instance }, new() { Instance, IntType.Instance }, },
             resultType: Instance,
             operatorType: OperatorType.GreaterThan,
             func: args =>
             {
+                args = ConvertToFloat(args);
+
                 var result = BoolType.Instance.GetInstance(((FloatInstance)args[0]).Value > ((FloatInstance)args[1]).Value);
 
                 if (BoolType.Instance.IsInstance(result))
@@ -96,11 +105,13 @@ public class FloatType : IType
                     throw new InvalidDataException();
             }),
         new Operator(
-            operandTypes: new List<IType>() { Instance, Instance },
+            operandTypes: new List<List<IType>>() { new() { Instance, Instance }, new() { IntType.Instance, Instance }, new() { Instance, IntType.Instance }, },
             resultType: Instance,
             operatorType: OperatorType.GreaterThanOrEqual,
             func: args =>
             {
+                args = ConvertToFloat(args);
+
                 var result = BoolType.Instance.GetInstance(((FloatInstance)args[0]).Value >= ((FloatInstance)args[1]).Value);
 
                 if (BoolType.Instance.IsInstance(result))
@@ -109,11 +120,13 @@ public class FloatType : IType
                     throw new InvalidDataException();
             }),
         new Operator(
-            operandTypes: new List<IType>() { Instance, Instance },
+            operandTypes: new List<List<IType>>() { new() { Instance, Instance }, new() { IntType.Instance, Instance }, new() { Instance, IntType.Instance }, },
             resultType: Instance,
             operatorType: OperatorType.Addition,
             func: args =>
             {
+                args = ConvertToFloat(args);
+
                 var result = Instance.GetInstance(((FloatInstance)args[0]).Value + ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
@@ -122,11 +135,13 @@ public class FloatType : IType
                     throw new InvalidDataException();
             }),
         new Operator(
-            operandTypes: new List<IType>() { Instance, Instance },
+            operandTypes: new List<List<IType>>() { new() { Instance, Instance }, new() { IntType.Instance, Instance }, new() { Instance, IntType.Instance }, },
             resultType: Instance,
             operatorType: OperatorType.Subtraction,
             func: args =>
             {
+                args = ConvertToFloat(args);
+
                 var result = Instance.GetInstance(((FloatInstance)args[0]).Value - ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
@@ -135,11 +150,13 @@ public class FloatType : IType
                     throw new InvalidDataException();
             }),
         new Operator(
-            operandTypes: new List<IType>() { Instance, Instance },
+            operandTypes: new List<List<IType>>() { new() { Instance, Instance }, new() { IntType.Instance, Instance }, new() { Instance, IntType.Instance }, },
             resultType: Instance,
             operatorType: OperatorType.Multiplication,
             func: args =>
             {
+                args = ConvertToFloat(args);
+
                 var result = Instance.GetInstance(((FloatInstance)args[0]).Value * ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
@@ -148,11 +165,13 @@ public class FloatType : IType
                     throw new InvalidDataException();
             }),
         new Operator(
-            operandTypes: new List<IType>() { Instance, Instance },
+            operandTypes: new List<List<IType>>() { new() { Instance, Instance }, new() { IntType.Instance, Instance }, new() { Instance, IntType.Instance }, },
             resultType: Instance,
             operatorType: OperatorType.Division,
             func: args =>
             {
+                args = ConvertToFloat(args);
+
                 var result = Instance.GetInstance(((FloatInstance)args[0]).Value / ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
@@ -161,11 +180,13 @@ public class FloatType : IType
                     throw new InvalidDataException();
             }),
         new Operator(
-            operandTypes: new List<IType>() { Instance, Instance },
+            operandTypes: new List<List<IType>>() { new() { Instance, Instance }, new() { IntType.Instance, Instance }, new() { Instance, IntType.Instance }, },
             resultType: Instance,
             operatorType: OperatorType.Mod,
             func: args =>
             {
+                args = ConvertToFloat(args);
+
                 var result = Instance.GetInstance(((FloatInstance)args[0]).Value % ((FloatInstance)args[1]).Value);
 
                 if (Instance.IsInstance(result))
@@ -174,13 +195,15 @@ public class FloatType : IType
                     throw new InvalidDataException();
             }),
         new Operator(
-            operandTypes: new List<IType>() { Instance, Instance },
+            operandTypes: new List<List<IType>>() { new() { Instance, Instance }, new() { IntType.Instance, Instance }, new() { Instance, IntType.Instance }, },
             resultType: Instance,
             operatorType: OperatorType.Exponent,
             func: args =>
             {
-                var a = ((FloatInstance)args[0]).Value;
-                var b = ((FloatInstance)args[1]).Value;
+                args = ConvertToFloat(args);
+
+                var a = ((FloatInstance)args[1]).Value;
+                var b = ((FloatInstance)args[0]).Value;
 
                 var result = Instance.GetInstance(Math.Pow(a, b));
 
@@ -253,6 +276,17 @@ public class FloatType : IType
     }
 
     public bool IsInstance(IInstance<IType> instance) => instance is IInstance<FloatType>;
+
+    private List<IInstance<IType>> ConvertToFloat(List<IInstance<IType>> args)
+    {
+        for (int i = 0; i < args.Count; i++)
+        {
+            if (args[i] is IntInstance)
+                args[i] = (FloatInstance)(args[i] as IntInstance)!;
+        }
+
+        return args;
+    }
 
     public IInstance<IType> Cast(IInstance<IType> instance)
     {

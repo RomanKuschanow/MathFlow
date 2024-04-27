@@ -13,4 +13,6 @@ public class FloatInstance : IInstance<FloatType>
     }
 
     public override string ToString() => Value.ToString();
+
+    public static explicit operator IntInstance(FloatInstance floatInstance) => new(Convert.ToInt64(floatInstance.Value));
 }

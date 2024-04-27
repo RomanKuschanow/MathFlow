@@ -13,4 +13,6 @@ public class IntInstance : IInstance<IntType>
     }
 
     public override string ToString() => Value.ToString();
+
+    public static explicit operator FloatInstance(IntInstance intInstance) => new(Convert.ToDouble(intInstance.Value));
 }

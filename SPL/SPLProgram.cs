@@ -14,14 +14,14 @@ public class SPLProgram
 {
     private static List<ILexemeDefinition> _lexemesDefinition = new()
     {
-        new RegexLexemeDefinition(new(@"^(?:if|else|while|break|continue|print|input)"), "keyword"),
+        new RegexLexemeDefinition(new(@"^(?:if|else|while|break|continue|print|p|input)"), "keyword"),
         new RegexLexemeDefinition(new($@"^(:{string.Join("|", typeof(IType).Assembly.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IType))).Select(t => t.GetProperty("Instance").GetValue(null) as IType).SelectMany(t => t.Aliases))})"), "type"),
-        new RegexLexemeDefinition(new(@"^(?:[\p{L}_]+[\p{L}_\d]*)"), "id"),
         new RegexLexemeDefinition(new(@"^(?:\b\d+\b(?!f|\.))"), "int"),
         new RegexLexemeDefinition(new(@"^(?:\b\d+(?:\.\d+)?(?:[Ee][+-]?\d+)?f?)"), "float"),
         new RegexLexemeDefinition(new(@"^(?:true|false)"), "bool"),
+        new RegexLexemeDefinition(new(@"^(?:[\p{L}_]+[\p{L}_\d]*)"), "id"),
         new StringLexemeDefinition(),
-        new RegexLexemeDefinition(new(@"^(?:<=|>=|==|!=|\|\||&&|[=!><*/+%-])"), "operator"),
+        new RegexLexemeDefinition(new(@"^(?:<=|>=|==|!=|\|\||&&|\*\*|[=!><*/+%-])"), "operator"),
         new RegexLexemeDefinition(new(@"^(?:[(){},;])"), "separator"),
         new RegexLexemeDefinition(new(@"^\s"), "whitespace", true),
     };
@@ -42,6 +42,7 @@ public class SPLProgram
         new() { "Declaration", "type", "id", "=", "Expression" },
         new() { "Assignment", "id", "=", "Expression" },
         new() { "PrintStatement", "print", "(", "Args", ")" },
+        new() { "PrintStatement", "p", "Expression" },
         new() { "IfStatement", "if", "(", "Expression", ")", "Block", "ElsePart" },
         new() { "ElsePart", "else", "Block" },
         new() { "ElsePart", "" },
@@ -132,11 +133,11 @@ public class SPLProgram
 
             Analyzer analyzer = new();
 
-            try
-            {
                 var lexemes = lexer.Analyze(_code);
                 var tree = _parser.Parse(GetParserStack(lexemes, _grammar));
                 _program = analyzer.Analyze(tree);
+            try
+            {
             }
             catch (Exception e)
             {

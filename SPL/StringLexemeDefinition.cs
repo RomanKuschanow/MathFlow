@@ -18,13 +18,13 @@ internal class StringLexemeDefinition : ILexemeDefinition
     {
         Match match = Regex.Match(text, @"^""(?:\\\\|\\""|\\n|\\r|[^""\\])*""");
 
-        return match.Success ? new(Type, match.Value) : null;
+        return match.Success ? new(Type, Parse(match.Value), match.Value.Length) : null;
     }
 
     private string Parse(string input)
     {
         StringBuilder output = new StringBuilder();
-        for (int i = 0; i < input.Length; i++)
+        for (int i = 1; i < input.Length - 1; i++)
         {
             if (input[i] == '\\' && i + 1 < input.Length)
             {
@@ -39,9 +39,11 @@ internal class StringLexemeDefinition : ILexemeDefinition
             }
             else
             {
-                throw new InvalidDataException(nameof(input));
+                output.Append(input[i]);
             }
         }
-        return output.ToString();
+
+        var result = '"' + output.ToString() + '"';
+        return result;
     }
 }

@@ -4,7 +4,7 @@ using SPL.System.Types;
 namespace SPL.System.Operators;
 public interface IOperator
 {
-    List<IType> Operands { get; }
+    List<List<IType>> Operands { get; }
 
     IType ResultType { get; }
 

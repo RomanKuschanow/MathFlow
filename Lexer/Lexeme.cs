@@ -3,8 +3,9 @@ public record Lexeme
 {
     public string Type { get; init; }
     public string Value { get; init; }
+    public int Length { get; init; }
 
-    public Lexeme(string type, string value)
+    public Lexeme(string type, string value, int? length = null)
     {
         if (string.IsNullOrWhiteSpace(type))
         {
@@ -13,5 +14,6 @@ public record Lexeme
 
         Type = type;
         Value = value;
+        Length = length ?? Value.Length;
     }
 }
