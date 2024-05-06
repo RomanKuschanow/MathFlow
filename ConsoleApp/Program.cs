@@ -33,13 +33,16 @@ internal class Program
 
         SPLProgram.UpdateParser();
 
-        await program.Build();
-        await program.Execute();
+        CancellationTokenSource source = new();
+        var ct = source.Token;
+
+        await program.Build(ct);
+        await program.Execute(ct);
     }
 
-    private static async Task<string> Input(string str)
+    private static async Task<string> Input(string str, CancellationToken ct)
     {
         Console.Write(str);
-        return await Task.Run(Console.ReadLine);
+        return await Task.Run(Console.ReadLine, ct);
     }
 }

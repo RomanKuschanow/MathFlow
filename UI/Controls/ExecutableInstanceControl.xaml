@@ -1,0 +1,67 @@
+﻿<UserControl
+    x:Class="UI.Controls.ExecutableInstanceControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="clr-namespace:UI.Converters"
+    xmlns:ctrl="clr-namespace:UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:UI.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:UI.ViewModels"
+    d:Background="White"
+    d:DataContext="{d:DesignInstance Type=vm:ExecutableInstanceViewModel}"
+    d:DesignHeight="400"
+    d:DesignWidth="500"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <conv:BoolToVisibilityConvert x:Key="BoolToVisibility" />
+        <conv:BoolToVisibilityReverseConvert x:Key="BoolToVisibilityReverse" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <ToolBarPanel>
+            <ToolBar>
+                <Button
+                    Margin="2,0"
+                    Padding="0,0,0,0"
+                    Command="{Binding ExecuteCommand}"
+                    Content="⏵Run"
+                    FontWeight="Medium"
+                    Foreground="Green"
+                    Visibility="{Binding IsRunning, Converter={StaticResource BoolToVisibilityReverse}}" />
+                <Button
+                    Margin="2,0"
+                    Padding="0,0,0,0"
+                    Command="{Binding CancelCommand}"
+                    Content="⏹Stop"
+                    FontWeight="Medium"
+                    Foreground="Red"
+                    Visibility="{Binding IsRunning, Converter={StaticResource BoolToVisibility}}" />
+                <Button
+                    Margin="2,0"
+                    Padding="0,0,0,0"
+                    Command="{Binding ClearOutputCommand}"
+                    Content="Clear output"
+                    FontWeight="Medium" />
+            </ToolBar>
+        </ToolBarPanel>
+
+        <GridSplitter
+            Grid.Row="2"
+            Height="8"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Background="White"
+            ResizeDirection="Rows" />
+
+        <ctrl:ConsoleControl Grid.Row="3" DataContext="{Binding ConsoleViewModel}" />
+    </Grid>
+</UserControl>

@@ -28,20 +28,23 @@ public class WhileStatement : IStatement, IStatementList
 
     public List<Variable> GetAllVariablesInScope() => Variables.Concat(Parent.GetAllVariablesInScope()).ToList();
 
-    public void Execute()
+    public async Task Execute(CancellationToken ct)
     {
-        var condition = _condition.GetValue();
-
-        Variables.Clear();
-
-        if (condition.Type is not BoolType)
-            throw new InvalidDataException($"condition must be a type of 'Bool', but found '{condition.Type.Name}'");
-
-        if (((BoolInstance)condition).Value)
+        await Task.Run(() =>
         {
-            _getStatements(new LinkedList<IStatement>(new IStatement[] { this }));
-            _getStatements(_statements);
-            return;
-        }
+            var condition = _condition.GetValue();
+
+            Variables.Clear();
+
+            if (condition.Type is not BoolType)
+                throw new InvalidDataException($"condition must be a type of 'Bool', but found '{condition.Type.Name}'");
+
+            if (((BoolInstance)condition).Value)
+            {
+                _getStatements(new LinkedList<IStatement>(new IStatement[] { this }));
+                _getStatements(_statements);
+                return;
+            }
+        }, ct);
     }
 }

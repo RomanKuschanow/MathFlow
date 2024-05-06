@@ -26,9 +26,4 @@ public partial class MainWindow : Window
 
         DataContext = _mainViewModel;
     }
-
-    private void Grid_Loaded(object sender, RoutedEventArgs e)
-    {
-        _mainViewModel.ExecuteCommand.Execute(Array.Empty<object>());
-    }
 }

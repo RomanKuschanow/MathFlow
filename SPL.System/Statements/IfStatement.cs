@@ -29,22 +29,25 @@ public class IfStatement : IStatement, IStatementList
 
     public List<Variable> GetAllVariablesInScope() => Variables.Concat(Parent.GetAllVariablesInScope()).ToList();
 
-    public void Execute()
+    public async Task Execute(CancellationToken ct)
     {
-        var condition = _condition.GetValue();
-
-        if (condition.Type is not BoolType)
-            throw new InvalidDataException($"condition must be a type of 'Bool', but found '{condition.Type.Name}'");
-
-        if (((BoolInstance)condition).Value)
+        await Task.Run(() =>
         {
-            _getStatements(_statements);
-            return;
-        }
-        else
-        {
-            _getStatements(new LinkedList<IStatement>(_else.Statements));
-            return;
-        }
+            var condition = _condition.GetValue();
+
+            if (condition.Type is not BoolType)
+                throw new InvalidDataException($"condition must be a type of 'Bool', but found '{condition.Type.Name}'");
+
+            if (((BoolInstance)condition).Value)
+            {
+                _getStatements(_statements);
+                return;
+            }
+            else
+            {
+                _getStatements(new LinkedList<IStatement>(_else.Statements));
+                return;
+            }
+        }, ct);
     }
 }

@@ -36,6 +36,12 @@ partial class ConsoleViewModel : ObservableObject
 
     private void IO_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
+        if (e.Action == NotifyCollectionChangedAction.Reset)
+        {
+            IOViewModels.Clear();
+            return;
+        }
+
         var newObj = e.NewItems.Cast<IConsoleIO>().Last();
 
         if (newObj is ConsoleOutput)
@@ -55,11 +61,15 @@ partial class ConsoleViewModel : ObservableObject
         iO.Insert(iO.Count, new ConsoleOutput(str));
     }
 
-    public async Task<string> Input(string str)
+    public async Task<string> Input(string str, CancellationToken ct)
     {
         ConsoleInput consoleInput = new(str);
         iO.Insert(iO.Count, consoleInput);
         return await consoleInput.GetInput();
     }
 
+    public void ClearOutput()
+    {
+        iO.Clear();
+    }
 }

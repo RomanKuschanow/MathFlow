@@ -10,5 +10,5 @@ public class BreakStatement : IStatement
         _continue = @continue;
     }
 
-    public void Execute() => _breakLoop(_continue);
+    public async Task Execute(CancellationToken ct) => await Task.Run(() => _breakLoop(_continue), ct);
 }

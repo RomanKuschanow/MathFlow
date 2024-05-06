@@ -95,28 +95,28 @@ public class SPLProgram
     private Program _program;
     private string _code;
     private List<Action<string>> _outs;
-    private Func<string, Task<string>> _in;
+    private Func<string, CancellationToken, Task<string>> _in;
 
     private static Grammar _grammar;
     private static Parser _parser;
 
-    public SPLProgram(string code, List<Action<string>> outs, Func<string, Task<string>> @in)
+    public SPLProgram(string code, List<Action<string>> outs, Func<string, CancellationToken, Task<string>> @in)
     {
         _code = code ?? throw new ArgumentNullException(nameof(code));
         SetInOut(outs, @in);
     }
 
-    public void SetInOut(List<Action<string>> outs, Func<string, Task<string>> @in)
+    public void SetInOut(List<Action<string>> outs, Func<string, CancellationToken, Task<string>> @in)
     {
         _outs = outs;
         _in = @in;
     }
 
-    public async Task Execute()
+    public async Task Execute(CancellationToken ct)
     {
         try
         {
-            await _program.Execute(_outs, _in);
+            await _program.Execute(_outs, _in, ct);
         }
         catch (Exception e)
         {
@@ -125,7 +125,7 @@ public class SPLProgram
         }
     }
 
-    public async Task Build()
+    public async Task Build(CancellationToken ct)
     {
         await Task.Run(() =>
         {
@@ -144,7 +144,7 @@ public class SPLProgram
                 foreach (Action<string> _out in _outs)
                     _out(e.Message);
             }
-        });
+        }, ct);
     }
 
     private Stack<IToken> GetParserStack(IEnumerable<Lexeme> lexemes, Grammar grammar)

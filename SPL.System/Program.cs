@@ -10,7 +10,7 @@ public class Program
     private Root _root;
 
     private Action<string> _out;
-    private Func<string, Task<string>> _in;
+    private Func<string, CancellationToken, Task<string>> _in;
 
     private Stack<IStatement> _statements;
 
@@ -24,7 +24,7 @@ public class Program
         OperatorsManager = operatorsManager ?? throw new ArgumentNullException(nameof(operatorsManager));
     }
 
-    public async Task Execute(List<Action<string>> outs, Func<string, Task<string>> @in)
+    public async Task Execute(List<Action<string>> outs, Func<string, CancellationToken, Task<string>> @in, CancellationToken ct)
     {
         if (outs is null)
         {
@@ -45,16 +45,16 @@ public class Program
 
         PushToStack(_root.Statements);
 
-        await Task.Run(() =>
+        await Task.Run(async () =>
         {
-            while (_statements.Count > 0)
-                _statements.Pop().Execute();
-        });
+            while (_statements.Count > 0 && !ct.IsCancellationRequested)
+                await _statements.Pop().Execute(ct).WaitAsync(ct);
+        }, ct);
     }
 
     public void ConsoleOut(string str) => _out(str);
 
-    public async Task<string> ConsoleIn(string str = "") => await _in(str);
+    public async Task<string> ConsoleIn(string str, CancellationToken ct) => await _in(str is null ? "" : str, ct);
 
     public void PushToStack(IEnumerable<IStatement> statements)
     {

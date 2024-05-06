@@ -20,7 +20,8 @@ public partial class ConsoleControl : UserControl
 
     private void listView_Loaded(object sender, RoutedEventArgs e)
     {
-        ((ConsoleViewModel)DataContext).ItemAdded += ViewModel_ItemAdded;
+        if (DataContext is ConsoleViewModel)
+            ((ConsoleViewModel)DataContext).ItemAdded += ViewModel_ItemAdded;
     }
 
     private void listView_SelectionChanged(object sender, SelectionChangedEventArgs e)

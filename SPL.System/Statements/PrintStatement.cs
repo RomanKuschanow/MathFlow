@@ -13,5 +13,5 @@ public class PrintStatement : IStatement
         _values = values ?? throw new ArgumentNullException(nameof(values));
     }
 
-    public void Execute() => _print(string.Join(" ", _values.Select(v => v.GetValue().ToString())));
+    public async Task Execute(CancellationToken ct) => await Task.Run(() => _print(string.Join(" ", _values.Select(v => v.GetValue().ToString()))), ct);
 }
