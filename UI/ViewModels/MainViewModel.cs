@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using SPL;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
 
@@ -15,24 +16,30 @@ partial class MainViewModel : ObservableObject
 
     public MainViewModel(Dispatcher dispatcher)
     {
+        SPLProgram.UpdateParser();
         _dispatcher = dispatcher;
     }
 
     [RelayCommand]
     private void OpenFile()
     {
-        OpenFileDialog openFileDialog = new();
-        openFileDialog.Title = "Select File";
-        openFileDialog.Filter = "All files (*.*)|*.*";
+        OpenFileDialog openFileDialog = new()
+        {
+            Title = "Select File",
+            Filter = "All files (*.*)|*.*"
+        };
 
         var result = openFileDialog.ShowDialog();
 
         if (result.HasValue && result.Value)
-            ExecutableInstanceViewModels.Add(new(_dispatcher, openFileDialog.FileName, CloseFile));
+            ExecutableInstanceViewModels.Add(new(_dispatcher, openFileDialog.FileName, CloseFile, true));
     }
 
-    private void CloseFile(ExecutableInstanceViewModel file)
+    [RelayCommand]
+    private void NewFile()
     {
-        ExecutableInstanceViewModels.Remove(file);
+        ExecutableInstanceViewModels.Add(new(_dispatcher, "", CloseFile, false));
     }
+
+    private void CloseFile(ExecutableInstanceViewModel file) => ExecutableInstanceViewModels.Remove(file);
 }

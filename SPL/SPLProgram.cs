@@ -94,19 +94,19 @@ public class SPLProgram
 
     private Program _program;
     private string _code;
-    private List<Action<string>> _outs;
+    private List<Func<string, CancellationToken, Task>> _outs;
     private Func<string, CancellationToken, Task<string>> _in;
 
     private static Grammar _grammar;
     private static Parser _parser;
 
-    public SPLProgram(string code, List<Action<string>> outs, Func<string, CancellationToken, Task<string>> @in)
+    public SPLProgram(string code, List<Func<string, CancellationToken, Task>> outs, Func<string, CancellationToken, Task<string>> @in)
     {
         _code = code ?? throw new ArgumentNullException(nameof(code));
         SetInOut(outs, @in);
     }
 
-    public void SetInOut(List<Action<string>> outs, Func<string, CancellationToken, Task<string>> @in)
+    public void SetInOut(List<Func<string, CancellationToken, Task>> outs, Func<string, CancellationToken, Task<string>> @in)
     {
         _outs = outs;
         _in = @in;
@@ -120,14 +120,14 @@ public class SPLProgram
         }
         catch (Exception e)
         {
-            foreach (Action<string> _out in _outs)
-                _out(e.Message);
+            foreach (Func<string, CancellationToken, Task> _out in _outs)
+                await _out(e.Message, CancellationToken.None);
         }
     }
 
     public async Task Build(CancellationToken ct)
     {
-        await Task.Run(() =>
+        await Task.Run(async () =>
         {
             LexemeAnalyzer lexer = new(_lexemesDefinition);
 
@@ -141,8 +141,8 @@ public class SPLProgram
             }
             catch (Exception e)
             {
-                foreach (Action<string> _out in _outs)
-                    _out(e.Message);
+                foreach (Func<string, CancellationToken, Task> _out in _outs)
+                    await _out(e.Message, CancellationToken.None);
             }
         }, ct);
     }

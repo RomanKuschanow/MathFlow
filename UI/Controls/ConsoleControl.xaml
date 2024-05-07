@@ -27,6 +27,8 @@
             x:Name="listView"
             ItemsSource="{Binding IOViewModels}"
             Loaded="listView_Loaded"
-            SelectionChanged="listView_SelectionChanged" />
+            SelectionChanged="listView_SelectionChanged"
+            VirtualizingPanel.IsVirtualizing="True"
+            VirtualizingPanel.VirtualizationMode="Recycling" />
     </Grid>
 </UserControl>

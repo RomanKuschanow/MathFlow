@@ -9,7 +9,7 @@ public class Program
 {
     private Root _root;
 
-    private Action<string> _out;
+    private Func<string, CancellationToken, Task> _out;
     private Func<string, CancellationToken, Task<string>> _in;
 
     private Stack<IStatement> _statements;
@@ -24,7 +24,7 @@ public class Program
         OperatorsManager = operatorsManager ?? throw new ArgumentNullException(nameof(operatorsManager));
     }
 
-    public async Task Execute(List<Action<string>> outs, Func<string, CancellationToken, Task<string>> @in, CancellationToken ct)
+    public async Task Execute(List<Func<string, CancellationToken, Task>> outs, Func<string, CancellationToken, Task<string>> @in, CancellationToken ct)
     {
         if (outs is null)
         {
@@ -52,7 +52,11 @@ public class Program
         }, ct);
     }
 
-    public void ConsoleOut(string str) => _out(str);
+    public async Task ConsoleOut(string str, CancellationToken ct)
+    {
+        await _out(str, ct);
+        await Task.Delay(1, ct);
+    }
 
     public async Task<string> ConsoleIn(string str, CancellationToken ct) => await _in(str is null ? "" : str, ct);
 

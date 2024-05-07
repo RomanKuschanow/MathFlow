@@ -13,8 +13,9 @@ public partial class ConsoleControl : UserControl
         InitializeComponent();
     }
 
-    private void ViewModel_ItemAdded(object newItem)
+    private async void ViewModel_ItemAdded(object newItem)
     {
+        await Task.Delay(1);
         listView.ScrollIntoView(newItem);
     }
 

@@ -29,7 +29,7 @@ internal class Program
             return;
         }
 
-        SPLProgram program = new(code, new() { Console.WriteLine }, Input);
+        SPLProgram program = new(code, new() {async (str, ct) => await Task.Run(() => Console.WriteLine(str), ct) }, Input);
 
         SPLProgram.UpdateParser();
 

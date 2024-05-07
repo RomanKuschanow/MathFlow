@@ -23,18 +23,18 @@ partial class ConsoleViewModel : ObservableObject
     {
         _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
         IOViewModels = new();
-        IOViewModels.CollectionChanged += (s, e) =>
+        IOViewModels.CollectionChanged += async (s, e) =>
         {
             if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems.Count > 0)
             {
-                _dispatcher.BeginInvoke(() => ItemAdded?.Invoke(e.NewItems[^1]));
+                await _dispatcher.InvokeAsync(() => ItemAdded?.Invoke(e.NewItems[^1]));
             }
         };
         iO = new();
         iO.CollectionChanged += IO_CollectionChanged;
     }
 
-    private void IO_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    private async void IO_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == NotifyCollectionChangedAction.Reset)
         {
@@ -46,19 +46,20 @@ partial class ConsoleViewModel : ObservableObject
 
         if (newObj is ConsoleOutput)
         {
-            _dispatcher.BeginInvoke(() => IOViewModels.Insert(IOViewModels.Count, new ConsoleOutputViewModel(newObj as ConsoleOutput)));
+            await _dispatcher.InvokeAsync(() => IOViewModels.Insert(IOViewModels.Count, new ConsoleOutputViewModel(newObj as ConsoleOutput)));
         }
         else if (newObj is ConsoleInput)
         {
-            _dispatcher.BeginInvoke(() => IOViewModels.Insert(IOViewModels.Count, new ConsoleInputViewModel(newObj as ConsoleInput)));
+            await _dispatcher.InvokeAsync(() => IOViewModels.Insert(IOViewModels.Count, new ConsoleInputViewModel(newObj as ConsoleInput)));
         }
         else
             throw new InvalidDataException(nameof(newObj));
     }
 
-    public void Output(string str)
+    public Task Output(string str, CancellationToken ct)
     {
         iO.Insert(iO.Count, new ConsoleOutput(str));
+        return Task.CompletedTask;
     }
 
     public async Task<string> Input(string str, CancellationToken ct)
