@@ -15,8 +15,6 @@ public class RuleAnalyzer
 
         IRule header = GetHeaderRule(grammar);
 
-        var follows = Follows(header, grammar);
-
         List<State> states = new();
         List<Goto> gotos = new();
 

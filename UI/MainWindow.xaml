@@ -8,7 +8,7 @@
     xmlns:local="clr-namespace:UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:UI.ViewModels"
-    Title="MainWindow"
+    Title="SPL"
     Width="800"
     Height="450"
     d:DataContext="{d:DesignData Type=vm:MainViewModel}"

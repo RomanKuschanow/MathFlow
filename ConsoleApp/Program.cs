@@ -20,7 +20,7 @@ internal class Program
             }
             else
             {
-                code = "p" + string.Join(" ", args) + ";";
+                code = string.Join(" ", args);
             }
         }
         catch

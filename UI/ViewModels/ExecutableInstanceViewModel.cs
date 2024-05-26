@@ -13,6 +13,8 @@ partial class ExecutableInstanceViewModel : ObservableObject
 {
     private CancellationTokenSource? ctSource;
     private Action<ExecutableInstanceViewModel> _close;
+    private string _compiledCode;
+    private SPLProgram _program;
 
     [ObservableProperty]
     private ConsoleViewModel consoleViewModel;
@@ -75,7 +77,11 @@ partial class ExecutableInstanceViewModel : ObservableObject
             var result = saveFileDialog.ShowDialog();
 
             if (result.HasValue && result.Value)
+            {
                 FilePath = saveFileDialog.FileName;
+                Document.FileName = FilePath[(FilePath.LastIndexOf('\\') + 1)..];
+                OnPropertyChanged(nameof(FileName));
+            }
             else
                 return;
         }
@@ -92,10 +98,14 @@ partial class ExecutableInstanceViewModel : ObservableObject
 
         IsRunning = true;
 
-        SPLProgram program = new(Code, new() { ConsoleViewModel.Output }, ConsoleViewModel.Input);
+        if (_compiledCode != Code)
+        {
+            _program = new(Code, new() { ConsoleViewModel.Output }, ConsoleViewModel.Input);
+            await _program.Build(ct);
+            _compiledCode = Code;
+        }
 
-        await program.Build(ct);
-        await program.Execute(ct);
+        await _program.Execute(ct);
 
         IsRunning = false;
     }

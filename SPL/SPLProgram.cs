@@ -133,11 +133,11 @@ public class SPLProgram
 
             Analyzer analyzer = new();
 
+            try
+            {
                 var lexemes = lexer.Analyze(_code);
                 var tree = _parser.Parse(GetParserStack(lexemes, _grammar));
                 _program = analyzer.Analyze(tree);
-            try
-            {
             }
             catch (Exception e)
             {
