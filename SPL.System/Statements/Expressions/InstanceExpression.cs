@@ -16,5 +16,5 @@ public class InstanceExpression : IExpression
         _instance = instance;
     }
 
-    public IInstance<IType> GetValue() => _instance;
+    public async Task<IInstance<IType>> GetValue(CancellationToken ct) => await Task.FromResult(_instance);
 }

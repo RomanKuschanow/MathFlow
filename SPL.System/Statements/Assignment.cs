@@ -21,5 +21,5 @@ public class Assignment : IStatement
         _value = value;
     }
 
-    public async Task Execute(CancellationToken ct) => await Task.Run(() => _assignValue(_name, _value.GetValue()), ct);
+    public async Task Execute(CancellationToken ct) => _assignValue(_name, await _value.GetValue(ct));
 }

@@ -111,7 +111,11 @@ partial class ExecutableInstanceViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void Cancel() => ctSource?.Cancel();
+    private void Cancel()
+    {
+        ctSource?.Cancel();
+        ConsoleViewModel.Cancel();
+    }
 
     [RelayCommand(CanExecute = nameof(ClearOutputCanExecute))]
     private void ClearOutput() => ConsoleViewModel.ClearOutput();

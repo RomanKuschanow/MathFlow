@@ -23,5 +23,5 @@ public class Declaration : IStatement
         _value = value ?? new InstanceExpression(_type.GetInstance());
     }
 
-    public async Task Execute(CancellationToken ct) => await Task.Run(() => _declareValue(_name, _type, _value.GetValue()), ct);
+    public async Task Execute(CancellationToken ct) => _declareValue(_name, _type, await _value.GetValue(ct));
 }

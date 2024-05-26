@@ -30,9 +30,9 @@ public class WhileStatement : IStatement, IStatementList
 
     public async Task Execute(CancellationToken ct)
     {
-        await Task.Run(() =>
+        await Task.Run(async () =>
         {
-            var condition = _condition.GetValue();
+            var condition = await _condition.GetValue(ct);
 
             Variables.Clear();
 

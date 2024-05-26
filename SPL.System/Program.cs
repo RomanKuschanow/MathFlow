@@ -42,6 +42,7 @@ public class Program
         _in = @in.GetInvocationList().Length == 1 ? @in : throw new InvalidDataException("input delegate must not be a type of 'MulticastDelegate'");
 
         _statements = new();
+        _root.ClearVariables();
 
         PushToStack(_root.Statements);
 

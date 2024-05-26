@@ -46,11 +46,11 @@ partial class ConsoleViewModel : ObservableObject
 
         if (newObj is ConsoleOutput)
         {
-            await _dispatcher.InvokeAsync(() => IOViewModels.Insert(IOViewModels.Count, new ConsoleOutputViewModel(newObj as ConsoleOutput)));
+            await _dispatcher.InvokeAsync(() => IOViewModels.Add(new ConsoleOutputViewModel(newObj as ConsoleOutput)));
         }
         else if (newObj is ConsoleInput)
         {
-            await _dispatcher.InvokeAsync(() => IOViewModels.Insert(IOViewModels.Count, new ConsoleInputViewModel(newObj as ConsoleInput)));
+            await _dispatcher.InvokeAsync(() => IOViewModels.Add(new ConsoleInputViewModel(newObj as ConsoleInput)));
         }
         else
             throw new InvalidDataException(nameof(newObj));
@@ -65,12 +65,18 @@ partial class ConsoleViewModel : ObservableObject
     public async Task<string> Input(string str, CancellationToken ct)
     {
         ConsoleInput consoleInput = new(str);
-        iO.Insert(iO.Count, consoleInput);
+        iO.Add(consoleInput);
         return await consoleInput.GetInput();
     }
 
     public void ClearOutput()
     {
         iO.Clear();
+    }
+
+    public void Cancel()
+    {
+        if (iO.Where(i => i is ConsoleInput).Count() > 0)
+            ((ConsoleInput)iO.Last(i => i is ConsoleInput)).tcs.SetCanceled();
     }
 }

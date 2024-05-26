@@ -18,5 +18,5 @@ public class CastExpression : IExpression
         _expression = expression ?? throw new ArgumentNullException(nameof(expression));
     }
 
-    public IInstance<IType> GetValue() => _to.Cast(_expression.GetValue());
+    public async Task<IInstance<IType>> GetValue(CancellationToken ct) => _to.Cast(await _expression.GetValue(ct));
 }

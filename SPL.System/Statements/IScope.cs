@@ -9,6 +9,8 @@ public interface IScope
 
     List<Variable> GetAllVariablesInScope();
 
+    void ClearVariables();
+
     void CreateVariable(string name, IType type, IInstance<IType> value = null!)
     {
         if (GetAllVariablesInScope().Select(v => v.Name).Contains(name))

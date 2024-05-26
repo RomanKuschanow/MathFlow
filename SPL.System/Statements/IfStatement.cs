@@ -31,9 +31,9 @@ public class IfStatement : IStatement, IStatementList
 
     public async Task Execute(CancellationToken ct)
     {
-        await Task.Run(() =>
+        await Task.Run(async () =>
         {
-            var condition = _condition.GetValue();
+            var condition = await _condition.GetValue(ct);
 
             if (condition.Type is not BoolType)
                 throw new InvalidDataException($"condition must be a type of 'Bool', but found '{condition.Type.Name}'");

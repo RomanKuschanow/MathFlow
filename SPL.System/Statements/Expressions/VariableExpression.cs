@@ -18,5 +18,5 @@ public class VariableExpression : IExpression
         _getValue = getValue ?? throw new ArgumentNullException(nameof(getValue));
     }
 
-    public IInstance<IType> GetValue() => _getValue(_name);
+    public async Task<IInstance<IType>> GetValue(CancellationToken ct) => await Task.FromResult(_getValue(_name));
 }

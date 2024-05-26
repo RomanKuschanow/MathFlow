@@ -16,10 +16,10 @@ public class OperatorExpression : IExpression
         _getOperator = getOperator ?? throw new ArgumentNullException(nameof(getOperator));
     }
 
-    public IInstance<IType> GetValue()
+    public async Task<IInstance<IType>> GetValue(CancellationToken ct)
     {
-        var operands = _operands.Select(o => o.GetValue()).ToList();
+        var operands = _operands.Select(o => o.GetValue(ct).GetAwaiter().GetResult()).ToList();
 
-        return _getOperator(operands.Select(o => o.Type).ToList(), _operatorType).Calculate(operands);
+        return await Task.FromResult(_getOperator(operands.Select(o => o.Type).ToList(), _operatorType).Calculate(operands));
     }
 }

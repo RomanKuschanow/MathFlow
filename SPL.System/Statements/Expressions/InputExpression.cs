@@ -14,11 +14,10 @@ public class InputExpression : IExpression
         _values = values ?? new List<IExpression>() { new InstanceExpression(StringType.Instance.GetInstance()) };
     }
 
-
-    public IInstance<IType> GetValue()
+    public async Task<IInstance<IType>> GetValue(CancellationToken ct)
     {
-        string result = _input(string.Join(" ", _values.Select(v => v.GetValue().ToString())), CancellationToken.None).GetAwaiter().GetResult();
+        string result = await _input(string.Join(" ", _values.Select(v => v.GetValue(ct).GetAwaiter().GetResult().ToString())), ct);
 
-        return (IInstance<IType>)new StringInstance(result);
+        return new StringInstance(result);
     }
 }
