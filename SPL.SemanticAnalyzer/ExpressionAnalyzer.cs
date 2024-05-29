@@ -1,16 +1,13 @@
 ﻿#nullable disable
-using SPL.System.Statements;
 using SPL.System;
-using SPL.System.Statements.Expressions;
-using SyntaxAnalyzer.Tokens;
-using System.Xml.Linq;
-using SPL.System.Operators;
-using System.Linq.Expressions;
-using SyntaxAnalyzer.Rules.Symbols;
 using SPL.System.Instances;
-using System.Runtime.CompilerServices;
+using SPL.System.Operators;
+using SPL.System.Statements;
+using SPL.System.Statements.Expressions;
 using SPL.System.Types;
-using System.Numerics;
+using SyntaxAnalyzer.Rules.Symbols;
+using SyntaxAnalyzer.Tokens;
+using System.Globalization;
 
 namespace SPL.SemanticAnalyzer;
 public partial class Analyzer
@@ -211,7 +208,7 @@ public partial class Analyzer
         return (value.Tokens[0].Symbol as IHaveValue<string>).Value switch
         {
             "int" => IntType.Instance.GetInstance(long.Parse((value.Tokens[0] as Terminal).Value)),
-            "float" => FloatType.Instance.GetInstance(double.Parse((value.Tokens[0] as Terminal).Value.TrimEnd('f'))),
+            "float" => FloatType.Instance.GetInstance(double.Parse((value.Tokens[0] as Terminal).Value.TrimEnd('f'), new NumberFormatInfo())),
             "bool" => BoolType.Instance.GetInstance(bool.Parse((value.Tokens[0] as Terminal).Value)),
             "string" => StringType.Instance.GetInstance((value.Tokens[0] as Terminal).Value[1..^1]),
             _ => throw new()
@@ -227,7 +224,7 @@ public partial class Analyzer
 
         return new OperatorExpression(new List<IExpression>() { GetFactor(negation.Tokens[1] as Nonterminal, program, statementList) }, OperatorType.Negation, program.OperatorsManager.GetOperator);
     }
-    
+
     private IExpression GetNot(Nonterminal not, Program program, IStatementList statementList)
     {
         if (not.SymbolName != "Not")
@@ -236,7 +233,7 @@ public partial class Analyzer
         }
 
         return new OperatorExpression(new List<IExpression>() { GetFactor(not.Tokens[1] as Nonterminal, program, statementList) }, OperatorType.Not, program.OperatorsManager.GetOperator);
-    }    
+    }
 
     private IExpression GetFactorial(Nonterminal factorial, Program program, IStatementList statementList)
     {

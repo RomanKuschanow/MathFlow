@@ -1,4 +1,5 @@
 ﻿using SPL.System.Types;
+using System.Globalization;
 
 namespace SPL.System.Instances;
 public class FloatInstance : IInstance<FloatType>
@@ -12,7 +13,7 @@ public class FloatInstance : IInstance<FloatType>
         Value = value;
     }
 
-    public override string ToString() => Value.ToString();
+    public override string ToString() => Value.ToString(new NumberFormatInfo());
 
     public static explicit operator IntInstance(FloatInstance floatInstance) => new(Convert.ToInt64(floatInstance.Value));
 }
